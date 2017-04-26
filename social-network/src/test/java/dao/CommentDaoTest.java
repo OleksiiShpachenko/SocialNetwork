@@ -11,10 +11,10 @@ import javax.naming.NamingException;
 import org.junit.*;
 
 import com.shpach.sn.persistence.entities.Comment;
+import com.shpach.sn.persistence.jdbc.dao.comment.ICommentDao;
+import com.shpach.sn.persistence.jdbc.dao.comment.MySqlCommentDao;
 import com.shpach.sn.persistence.jdbc.dao.factory.IDaoFactory;
 import com.shpach.sn.persistence.jdbc.dao.factory.MySqlDaoFactory;
-import com.shpach.sn.persistent.jdbc.dao.comment.ICommentDao;
-import com.shpach.sn.persistent.jdbc.dao.comment.MySqlCommentDao;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyInt;

@@ -1,5 +1,6 @@
 package com.shpach.sn.persistence.jdbc.dao.factory;
 
+import com.shpach.sn.persistence.jdbc.dao.comment.ICommentDao;
 import com.shpach.sn.persistence.jdbc.dao.community.ICommunityDao;
 import com.shpach.sn.persistence.jdbc.dao.communitymember.ICommunityMemberDao;
 import com.shpach.sn.persistence.jdbc.dao.friend.IFriendDao;
@@ -7,7 +8,6 @@ import com.shpach.sn.persistence.jdbc.dao.image.IImageDao;
 import com.shpach.sn.persistence.jdbc.dao.post.IPostDao;
 import com.shpach.sn.persistence.jdbc.dao.user.IUserDao;
 import com.shpach.sn.persistence.jdbc.dao.userrole.IUserRoleDao;
-import com.shpach.sn.persistent.jdbc.dao.comment.ICommentDao;
 
 public interface IDaoFactory {
 	IUserDao getUserDao();

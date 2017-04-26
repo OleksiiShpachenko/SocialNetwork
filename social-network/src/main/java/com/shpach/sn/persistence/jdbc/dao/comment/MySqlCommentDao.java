@@ -1,4 +1,4 @@
-package com.shpach.sn.persistent.jdbc.dao.comment;
+package com.shpach.sn.persistence.jdbc.dao.comment;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

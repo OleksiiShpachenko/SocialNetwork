@@ -1,5 +1,7 @@
 package com.shpach.sn.persistence.jdbc.dao.factory;
 
+import com.shpach.sn.persistence.jdbc.dao.comment.ICommentDao;
+import com.shpach.sn.persistence.jdbc.dao.comment.MySqlCommentDao;
 import com.shpach.sn.persistence.jdbc.dao.community.ICommunityDao;
 import com.shpach.sn.persistence.jdbc.dao.community.MySqlCommunityDao;
 import com.shpach.sn.persistence.jdbc.dao.communitymember.ICommunityMemberDao;
@@ -14,8 +16,6 @@ import com.shpach.sn.persistence.jdbc.dao.user.IUserDao;
 import com.shpach.sn.persistence.jdbc.dao.user.MySqlUserDao;
 import com.shpach.sn.persistence.jdbc.dao.userrole.IUserRoleDao;
 import com.shpach.sn.persistence.jdbc.dao.userrole.MySqlUserRoleDao;
-import com.shpach.sn.persistent.jdbc.dao.comment.ICommentDao;
-import com.shpach.sn.persistent.jdbc.dao.comment.MySqlCommentDao;
 
 /**Implementation of {@link IDaoFactory} for MySql database 
  * @author Shpachenko_A_K
