@@ -3,6 +3,8 @@ package com.shpach.sn.persistence.entities;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
+import java.util.Date;
 import java.util.List;
 
 
@@ -53,6 +55,10 @@ public class User implements Serializable {
 
 	@Column(name="user_post_permition")
 	private byte userPostPermition;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="user_create_datetime")
+	private Date userCreateDatetime;
 
 	//bi-directional many-to-one association to Comment
 	@OneToMany(mappedBy="user")
@@ -219,14 +225,14 @@ public class User implements Serializable {
 
 	public Friend addFriends1(Friend friends1) {
 		getFriends1().add(friends1);
-		friends1.setUser1(this);
+		friends1.setHostUser(this);
 
 		return friends1;
 	}
 
 	public Friend removeFriends1(Friend friends1) {
 		getFriends1().remove(friends1);
-		friends1.setUser1(null);
+		friends1.setHostUser(null);
 
 		return friends1;
 	}
@@ -241,14 +247,14 @@ public class User implements Serializable {
 
 	public Friend addFriends2(Friend friends2) {
 		getFriends2().add(friends2);
-		friends2.setUser2(this);
+		friends2.setSlaveUser(this);
 
 		return friends2;
 	}
 
 	public Friend removeFriends2(Friend friends2) {
 		getFriends2().remove(friends2);
-		friends2.setUser2(null);
+		friends2.setSlaveUser(null);
 
 		return friends2;
 	}
@@ -273,6 +279,87 @@ public class User implements Serializable {
 		post.setUser(null);
 
 		return post;
+	}
+
+	public Date getUserCreateDatetime() {
+		return userCreateDatetime;
+	}
+
+	public void setUserCreateDatetime(Date userCreateDatetime) {
+		this.userCreateDatetime = userCreateDatetime;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((avatarUrl == null) ? 0 : avatarUrl.hashCode());
+		result = prime * result + userActive;
+		result = prime * result + userCommentPermition;
+		result = prime * result + userCreateCommunityPermition;
+		result = prime * result + ((userCreateDatetime == null) ? 0 : userCreateDatetime.hashCode());
+		result = prime * result + ((userEmail == null) ? 0 : userEmail.hashCode());
+		result = prime * result + userId;
+		result = prime * result + userInvitePermition;
+		result = prime * result + ((userLogin == null) ? 0 : userLogin.hashCode());
+		result = prime * result + ((userName == null) ? 0 : userName.hashCode());
+		result = prime * result + ((userPassword == null) ? 0 : userPassword.hashCode());
+		result = prime * result + userPostPermition;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (avatarUrl == null) {
+			if (other.avatarUrl != null)
+				return false;
+		} else if (!avatarUrl.equals(other.avatarUrl))
+			return false;
+		if (userActive != other.userActive)
+			return false;
+		if (userCommentPermition != other.userCommentPermition)
+			return false;
+		if (userCreateCommunityPermition != other.userCreateCommunityPermition)
+			return false;
+		if (userCreateDatetime == null) {
+			if (other.userCreateDatetime != null)
+				return false;
+		} else if (!userCreateDatetime.equals(other.userCreateDatetime))
+			return false;
+		if (userEmail == null) {
+			if (other.userEmail != null)
+				return false;
+		} else if (!userEmail.equals(other.userEmail))
+			return false;
+		if (userId != other.userId)
+			return false;
+		if (userInvitePermition != other.userInvitePermition)
+			return false;
+		if (userLogin == null) {
+			if (other.userLogin != null)
+				return false;
+		} else if (!userLogin.equals(other.userLogin))
+			return false;
+		if (userName == null) {
+			if (other.userName != null)
+				return false;
+		} else if (!userName.equals(other.userName))
+			return false;
+		if (userPassword == null) {
+			if (other.userPassword != null)
+				return false;
+		} else if (!userPassword.equals(other.userPassword))
+			return false;
+		if (userPostPermition != other.userPostPermition)
+			return false;
+		return true;
 	}
 
 }

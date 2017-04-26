@@ -137,9 +137,9 @@ public abstract class AbstractDao<T> {
 	}
 
 	public int dynamicAdd(String sql, Connection connection, Object[] sqlParams) {
-		int res = 0;
+		int res = -1;
 		if (sqlParams == null)
-			return 0;
+			return res;
 		try {
 
 			Connection cn = connection;

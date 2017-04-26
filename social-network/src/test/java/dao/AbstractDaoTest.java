@@ -323,7 +323,7 @@ public class AbstractDaoTest extends DaoTest {
 		verify(mockResultSet, times(0)).next();
 		verify(mockResultSet, times(0)).getInt(1);
 		verify(mockResultSet, times(0)).close();
-		assertEquals(0, actual);
+		assertEquals(-1, actual);
 	}
 
 	@Test
@@ -347,7 +347,7 @@ public class AbstractDaoTest extends DaoTest {
 		verify(mockResultSet, times(0)).next();
 		verify(mockResultSet, times(0)).getInt(1);
 		verify(mockResultSet, times(0)).close();
-		assertEquals(0, actual);
+		assertEquals(-1, actual);
 	}
 
 	@Test

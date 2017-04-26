@@ -20,7 +20,7 @@ public class Community implements Serializable {
 	private int communityId;
 
 	@Column(name="community_name")
-	private int communityName;
+	private String communityName;
 
 	//bi-directional many-to-one association to CommunityMember
 	@OneToMany(mappedBy="community")
@@ -41,11 +41,11 @@ public class Community implements Serializable {
 		this.communityId = communityId;
 	}
 
-	public int getCommunityName() {
+	public String getCommunityName() {
 		return this.communityName;
 	}
 
-	public void setCommunityName(int communityName) {
+	public void setCommunityName(String communityName) {
 		this.communityName = communityName;
 	}
 
@@ -91,6 +91,34 @@ public class Community implements Serializable {
 		post.setCommunity(null);
 
 		return post;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + communityId;
+		result = prime * result + ((communityName == null) ? 0 : communityName.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Community other = (Community) obj;
+		if (communityId != other.communityId)
+			return false;
+		if (communityName == null) {
+			if (other.communityName != null)
+				return false;
+		} else if (!communityName.equals(other.communityName))
+			return false;
+		return true;
 	}
 
 }
