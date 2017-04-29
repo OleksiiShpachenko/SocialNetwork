@@ -1,5 +1,1 @@
-<html>
-<body>
-<h2>Hello World!</h2>
-</body>
-</html>
+<jsp:include page="WEB-INF/jsp/login_page.jsp"/>

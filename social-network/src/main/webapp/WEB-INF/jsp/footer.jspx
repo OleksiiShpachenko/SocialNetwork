@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    Document   : header
+    Created on : 05.01.2017, 21:05:23
+    Author     : Shpachenko Oleksii
+-->
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" version="2.0">
+
+	<jsp:directive.page contentType="text/html" pageEncoding="UTF-8" />
+
+	<fmt:setBundle basename="pagecontent" var="rb" />
+	<html>
+<head>
+<title>Tutor</title>
+<!--<jsp:directive.tagLib prefix="greetingstag" uri="/WEB-INF/tlds/usergreetingstag.tld" /> -->
+
+
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="styles/mainStyle.css" media="screen" type="text/css" />
+
+
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js">
+	<jsp:text />
+</script>
+
+
+
+</head>
+<body>
+	<div id="footer">
+		<div class="container">
+			<ul class="list-inline">
+				<li><form id="myHiddenFormId" action="pages" method="post">
+						<input type="hidden" name="command" value="locale" /> <input type="hidden" name="localeValue" value="ua_UA" /> <input type="submit"
+							class="button-link" value="Українська" />
+					</form></li>
+					<li><form id="myHiddenFormId" action="pages" method="post">
+						<input type="hidden" name="command" value="locale" /> <input type="hidden" name="localeValue" value="ru_RU" /> <input type="submit"
+							class="button-link" value="Русский" />
+					</form></li>
+				<li><form id="myHiddenFormId" action="pages" method="post">
+						<input type="hidden" name="command" value="locale" /> <input type="hidden" name="localeValue" value="en_US" /> <input type="submit"
+							class="button-link" value="English" />
+					</form></li>
+
+			</ul>
+
+			<p class="text-muted">Place sticky fooooter content here.</p>
+		</div>
+	</div>
+</body>
+	</html>
+
+</jsp:root>

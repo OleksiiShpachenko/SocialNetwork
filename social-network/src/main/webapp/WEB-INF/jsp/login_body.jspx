@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    Document   : header
+    Created on : 05.01.2017, 21:05:23
+    Author     : Shpachenko Oleksii
+-->
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" version="2.0">
+
+	<jsp:directive.page contentType="text/html" pageEncoding="UTF-8" />
+
+	<fmt:setBundle basename="pagecontent" var="rb" />
+	<html>
+<head>
+<title>EsocNet</title>
+<!--<jsp:directive.tagLib prefix="greetingstag" uri="/WEB-INF/tlds/usergreetingstag.tld" /> -->
+
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="styles/mainStyle.css" media="screen" type="text/css" />
+
+
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js">
+	<jsp:text />
+</script>
+
+</head>
+<body>
+	<div class="jumbotron">
+		<div class="container">
+			<div class="col-md-6">
+				<IMG alt="" src="images/network_conn_logo_tr.png" />
+			</div>
+			<div class="col-md-6">
+				<fmt:message key="registration.registration" bundle="${rb}" var="signUpText" />
+				<h2>${signUpText}</h2>
+
+				<form id="signupform" class="form-horizontal" role="form" action="pages" method="post">
+					<input type="hidden" name="command" value="registration" />
+					<div id="signupalert" style="display: none" class="alert alert-danger">
+						<p>Error:</p>
+						<span></span>
+					</div>
+					<fmt:message key="registration.userName" bundle="${rb}" var="userNameText" />
+					<fmt:message key="login.login" bundle="${rb}" var="loginText" />
+					<fmt:message key="login.password" bundle="${rb}" var="passwordText" />
+					<fmt:message key="login.confirmPassword" bundle="${rb}" var="confirmPasswordText" />
+
+					<div class="form-group">
+						<label for="email" class="col-md-3 control-label">${loginText}</label>
+						<div class="col-md-9">
+							<input type="text" class="form-control" name="email" placeholder="${loginText}" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="userName" class="col-md-3 control-label">${userNameText}</label>
+						<div class="col-md-9">
+							<input type="text" class="form-control" name="userName" placeholder="${userNameText}" />
+						</div>
+					</div>
+					<!--<div class="form-group">
+							<label for="lastname" class="col-md-3 control-label">Last
+								Name</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" name="lastname"
+									placeholder="Last Name" />
+							</div>
+						</div>
+						-->
+					<div class="form-group">
+						<label for="password" class="col-md-3 control-label">${passwordText}</label>
+						<div class="col-md-9">
+							<input type="password" class="form-control" name="password" placeholder="${passwordText}" />
+						</div>
+					</div>
+					<!--
+						<div class="form-group">
+							<label for="icode" class="col-md-3 control-label">Invitation
+								Code</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" name="icode"
+									placeholder="" />
+							</div>
+						</div>
+						-->
+					<div class="form-group">
+						<!-- Button -->
+						<fmt:message key="login.enter" bundle="${rb}" var="enterText" />
+						<div class="col-md-offset-3 col-md-9">
+							<button id="btn-signup" type="submit" class="btn btn-info">
+								<i class="icon-hand-right"></i> &#160;${enterText}
+							</button>
+
+						</div>
+					</div>
+
+					<div style="border-top: 1px solid #999; padding-top: 20px" class="form-group">
+						<!--				
+							<div class="col-md-offset-3 col-md-9">
+								<button id="btn-fbsignup" type="button" class="btn btn-primary">
+									<i class="icon-facebook"></i>   Sign Up with Facebook
+								</button>
+							</div>
+							-->
+					</div>
+
+
+
+				</form>
+
+
+
+
+			</div>
+
+
+		</div>
+	</div>
+
+
+
+
+</body>
+	</html>
+
+</jsp:root>
