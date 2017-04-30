@@ -43,12 +43,13 @@
           <a  href="#"><IMG alt="EsocNet" src="images/logo_color.png" /></a>
         </div>
         <div class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right" role="form">
+          <form class="navbar-form navbar-right" role="form" action="pages" method="post">
+          <input type="hidden" name="command" value="login" />
             <div class="form-group">
-              <input type="text" placeholder="${loginText}" class="form-control"/>&#160;
+              <input type="email" placeholder="${loginText}" class="form-control" name="login" value="${userEmailLogin}"/>&#160;
             </div>
             <div class="form-group">
-              <input type="password" placeholder="${passwordText}" class="form-control"/>&#160;
+              <input type="password" placeholder="${passwordText}" class="form-control" name="password"/>&#160;
             </div>
             <button type="submit" class="btn btn-success">${singInText}</button>
           </form>

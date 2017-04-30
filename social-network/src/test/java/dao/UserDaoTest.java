@@ -203,23 +203,73 @@ public class UserDaoTest extends DaoTest {
 	@Test
 	public void addOrApdateTestNewUser() throws SQLException, NamingException {
 
-		doReturn(user_1.getUserId()).when(spyUserDao).dynamicAdd(anyString(), anyObject());
+		doReturn(mockConnection).when(spyUserDao).getConnection();
+		doReturn(user_1.getUserId()).when(spyUserDao).dynamicAdd(anyString(),anyObject(), anyObject());
 
 		User actual = spyUserDao.addOrUpdate(userNew);
 
-		verify(spyUserDao, times(1)).dynamicAdd(anyString(), anyObject());
+		verify(spyUserDao, times(1)).getConnection();
+		verify(mockConnection, times(1)).setAutoCommit(false);
+		verify(mockConnection, times(1)).setAutoCommit(true);
+		verify(mockConnection, times(0)).rollback();
+		verify(mockConnection, times(1)).close();
+		
+		verify(spyUserDao, times(2)).dynamicAdd(anyString(),anyObject(), anyObject());
 
 		assertEquals(user_1, actual);
 	}
-
+	
 	@Test
-	public void addOrApdateTestNewUserFail() throws SQLException, NamingException {
+	public void addOrApdateTestNewUserFailAddUser() throws SQLException, NamingException {
 
-		doReturn(0).when(spyUserDao).dynamicAdd(anyString(), anyObject());
+		doReturn(mockConnection).when(spyUserDao).getConnection();
+		doReturn(0).when(spyUserDao).dynamicAdd(anyString(),anyObject(), anyObject());
 
 		User actual = spyUserDao.addOrUpdate(userNew);
 
-		verify(spyUserDao, times(1)).dynamicAdd(anyString(), anyObject());
+		verify(spyUserDao, times(1)).getConnection();
+		verify(mockConnection, times(1)).setAutoCommit(false);
+		verify(mockConnection, times(1)).setAutoCommit(true);
+		verify(mockConnection, times(1)).rollback();
+		verify(mockConnection, times(1)).close();
+		
+		verify(spyUserDao, times(1)).dynamicAdd(anyString(),anyObject(), anyObject());
+
+		assertNull(actual);
+	}
+	@Test
+	public void addOrApdateTestNewUserFailAddUserRoleRelations() throws SQLException, NamingException {
+
+		doReturn(mockConnection).when(spyUserDao).getConnection();
+		doReturn(user_1.getUserId()).doReturn(-1).when(spyUserDao).dynamicAdd(anyString(),anyObject(), anyObject());
+		
+		User actual = spyUserDao.addOrUpdate(userNew);
+
+		verify(spyUserDao, times(1)).getConnection();
+		verify(mockConnection, times(1)).setAutoCommit(false);
+		verify(mockConnection, times(1)).setAutoCommit(true);
+		verify(mockConnection, times(1)).rollback();
+		verify(mockConnection, times(1)).close();
+		
+		verify(spyUserDao, times(2)).dynamicAdd(anyString(),anyObject(), anyObject());
+
+		assertNull(actual);
+	}
+	
+	@Test
+	public void addOrApdateTestNewUserFailException() throws SQLException, NamingException {
+
+		doThrow(new SQLException()).when(spyUserDao).getConnection();
+		
+		User actual = spyUserDao.addOrUpdate(userNew);
+
+		verify(spyUserDao, times(1)).getConnection();
+		verify(mockConnection, times(0)).setAutoCommit(false);
+		verify(mockConnection, times(0)).setAutoCommit(true);
+		verify(mockConnection, times(0)).rollback();
+		verify(mockConnection, times(0)).close();
+		
+    	verify(spyUserDao, times(0)).dynamicAdd(anyString(),anyObject(), anyObject());
 
 		assertNull(actual);
 	}

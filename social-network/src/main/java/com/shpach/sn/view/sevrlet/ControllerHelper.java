@@ -6,8 +6,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.shpach.sn.command.CommandChangeLocale;
+import com.shpach.sn.command.CommandLogin;
 import com.shpach.sn.command.CommandMissing;
+import com.shpach.sn.command.CommandRegistration;
 import com.shpach.sn.command.ICommand;
+import com.shpach.sn.persistence.entities.User;
 
 //import com.shpach.tutor.commands.CommandAssignCategoryToTestDialog;
 //import com.shpach.tutor.commands.CommandAssignCommunityToTestDialog;
@@ -53,7 +56,7 @@ public class ControllerHelper {
 	HashMap<String, ICommand> commands = new HashMap<String, ICommand>();
 
 	private ControllerHelper() {
-//		commands.put("login", new CommandLogin());
+		commands.put("login", new CommandLogin());
 //		commands.put("tutorTests", new CommandTutorTests());
 		commands.put("locale", new CommandChangeLocale());
 //		commands.put("tutorCategories", new CommandTutorCategory());
@@ -75,7 +78,7 @@ public class ControllerHelper {
 //		commands.put("newTest", new CommandNewTest());
 //		commands.put("logOut", new CommandLogOut());
 //		commands.put("studentTests", new CommandStudentTests());
-//		commands.put("registration", new CommandRegistration());
+		commands.put("registration", new CommandRegistration());
 //		commands.put("takeTestStart", new CommandTakeTestStart());
 //		commands.put("takeTestSaveAnswer", new CommandTakeTestSaveAnswer());
 //		commands.put("takeTestFinish", new CommandTakeTestFinish());
@@ -137,17 +140,18 @@ public class ControllerHelper {
 			if (lastRequest != null)
 				res = new RequestWrapper(request, lastRequest);
 
-		}// else if (commandText.equals("login")) {
-//			Map<String, String[]> lastRequest = new HashMap<>();
-//			User user = (User) request.getSession().getAttribute("userEntity");
-//			String startCommand = "login";
-//			if (user != null) {
-//				startCommand = LoginService.getInstance().getStartCommandAccordingToUserRole(user);
-//			}
-//			lastRequest.put("command", new String[] { startCommand });
-//			if (lastRequest != null)
-//				res = new RequestWrapper(request, lastRequest);
-//		} else if (commandText.equals("takeTestSaveAnswer")) {
+		} else if (commandText.equals("login")) {
+        	Map<String, String[]> lastRequest = new HashMap<>();
+    		User user = (User) request.getSession().getAttribute("userEntity");
+			String startCommand = "login";
+			if (user != null) {
+				startCommand = "account";//LoginService.getInstance().getStartCommandAccordingToUserRole(user);
+			}
+			lastRequest.put("command", new String[] { startCommand });
+			if (lastRequest != null)
+				res = new RequestWrapper(request, lastRequest);
+		} 
+//			else if (commandText.equals("takeTestSaveAnswer")) {
 //			Boolean lastQuestion = (Boolean) request.getSession().getAttribute("testLastQuestion");
 //			if (lastQuestion != null) {
 //				Map<String, String[]> lastRequest = new HashMap<>();

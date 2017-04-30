@@ -1,5 +1,6 @@
 package com.shpach.sn.persistence.jdbc.dao.user;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -9,6 +10,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.shpach.sn.persistence.entities.User;
+import com.shpach.sn.persistence.jdbc.connection.ConnectionPoolTomCatFactory;
+import com.shpach.sn.persistence.jdbc.connection.IConnectionPoolFactory;
 import com.shpach.sn.persistence.jdbc.dao.abstractdao.AbstractDao;
 
 public class MySqlUserDao extends AbstractDao<User> implements IUserDao {
@@ -37,6 +40,8 @@ public class MySqlUserDao extends AbstractDao<User> implements IUserDao {
 
 	protected static final String TABLE_NAME = "user";
 	protected static final String TABLE_RELATIONSHIP_LIKES = "relationship_likes";
+	protected static final String TABLE_USER_TO_USER_ROLE = "relationship_user_to_user_role";
+	private static final int USER_ROLE_USER = 2;
 	protected final String SQL_SELECT = "SELECT " + Columns.user_id.name() + ", " + Columns.user_login.name() + ", "
 			+ Columns.user_password.name() + ", " + Columns.user_name.name() + ", " + Columns.user_email.name() + ", "
 			+ Columns.avatar_url.name() + ", " + Columns.user_active.name() + ", " + Columns.user_post_permition.name()
@@ -44,12 +49,15 @@ public class MySqlUserDao extends AbstractDao<User> implements IUserDao {
 			+ Columns.user_create_community_permition.name() + ", " + Columns.user_create_datetime.name() + " FROM "
 			+ TABLE_NAME + "";
 
-	protected final String SQL_INSERT = "INSERT INTO " + TABLE_NAME + " (" + Columns.user_id.name() + ", "
-			+ Columns.user_login.name() + ", " + Columns.user_password.name() + ", " + Columns.user_name.name() + ", "
-			+ Columns.user_email.name() + ", " + Columns.avatar_url.name() + ", " + Columns.user_active.name() + ", "
-			+ Columns.user_post_permition.name() + ", " + Columns.user_invite_permition.name() + ", "
-			+ Columns.user_comment_permition.name() + ", " + Columns.user_create_community_permition.name() + ", "
-			+ Columns.user_create_datetime.name() + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	protected final String SQL_INSERT = "INSERT INTO " + TABLE_NAME + " (" + Columns.user_login.name() + ", "
+			+ Columns.user_password.name() + ", " + Columns.user_name.name() + ", " + Columns.user_email.name() + ", "
+			+ Columns.avatar_url.name() + ", " + Columns.user_active.name() + ", " + Columns.user_post_permition.name()
+			+ ", " + Columns.user_invite_permition.name() + ", " + Columns.user_comment_permition.name() + ", "
+			+ Columns.user_create_community_permition.name() + ", " + Columns.user_create_datetime.name()
+			+ ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	
+	protected final String SQL_INSERT_USER_ROLE_RELATOINSHIP = "INSERT INTO " + TABLE_USER_TO_USER_ROLE + " (" + Columns.user_id.name() + ", "
+			+  " user_role_id " + ") VALUES (?, ?)";
 
 	protected final String SQL_UPDATE = "UPDATE " + TABLE_NAME + " SET " + Columns.user_login.name() + "=?, "
 			+ Columns.user_password.name() + "=?, " + Columns.user_name.name() + "=?, " + Columns.user_email.name()
@@ -117,12 +125,37 @@ public class MySqlUserDao extends AbstractDao<User> implements IUserDao {
 				user.getUserEmail(), user.getAvatarUrl(), user.getUserActive(), user.getUserPostPermition(),
 				user.getUserInvitePermition(), user.getUserCommentPermition(), user.getUserCreateCommunityPermition(),
 				user.getUserCreateDatetime() };
-		int id = dynamicAdd(SQL_INSERT, sqlParams);
-		if (id > 0) {
-			user.setUserId(id);
+
+		Connection cn = null;
+		try {
+			cn = getConnection();
+			cn.setAutoCommit(false);
+			int id = dynamicAdd(SQL_INSERT, cn, sqlParams);
+			if (id > 0) {
+				user.setUserId(id);
+
+			} else {
+				cn.rollback();
+				return false;
+			}
+			id=dynamicAdd(SQL_INSERT_USER_ROLE_RELATOINSHIP, cn, new Object[] {user.getUserId(), USER_ROLE_USER });
+			if (id<0){
+				cn.rollback();
+				return false;
+			}
 			return true;
+		} catch (SQLException | NullPointerException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			try {
+				cn.setAutoCommit(true);
+				cn.close();
+			} catch (SQLException | NullPointerException e ) {
+				e.printStackTrace();
+			}
+
 		}
-		return false;
 	}
 
 	public User findUserById(int id) {

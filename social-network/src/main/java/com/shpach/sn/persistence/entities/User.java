@@ -81,6 +81,13 @@ public class User implements Serializable {
 	private List<Post> posts;
 
 	public User() {
+		userCreateDatetime= new Date();
+		userPostPermition=1;
+		userPostPermition=1;
+		userInvitePermition=1;
+		userCreateCommunityPermition=1;
+		userCommentPermition=1;
+		userActive=1;
 	}
 
 	public int getUserId() {
