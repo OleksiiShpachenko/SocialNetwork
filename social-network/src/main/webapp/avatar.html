@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="styles/mainStyle.css" />
+</head>
+<body>
+	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">Project name</a>
+			</div>
+			<div class="navbar-collapse collapse">
+				<form class="navbar-form navbar-right" role="form">
+					<div class="form-group">
+						<input type="text" placeholder="Email" class="form-control" />
+					</div>
+					<div class="form-group">
+						<input type="password" placeholder="Password" class="form-control" />
+					</div>
+					<button type="submit" class="btn btn-success">Sign in</button>
+				</form>
+			</div>
+			<!--/.navbar-collapse -->
+		</div>
+	</div>
+
+
+	<div class="jumbotron">
+		<div class="container" style="position: relative;">
+			
+			
+			<div class="user_avatar_main">
+				<IMG class="thumbnail img-responsive" alt="" src="images/user_default.png" width="200" height="200" />
+			</div>
+			<div class="avatarbackground">
+				<IMG class="thumbnail img-responsive" alt="" src="images/user_background.png" width="1140" height="200" />
+			</div>
+			<div class="avatar_name">
+			<h2>${fn:escapeXml(userName)}</h2>
+			</div>
+			<div class="navbar navbar-default" role="navigation">
+			<ul class="list-inline userinfo">
+            <li> <form class="headerMenu" action="pages" method="post">
+						<input type="hidden" name="command" value="account" />
+						 <input type="submit"	class="button-link " value="${fn:escapeXml(userName)}"/>
+					</form></li>
+            <li><form class="headerMenu" action="pages" method="post">
+						<input type="hidden" name="command" value="newsfeed" /> 
+						<input type="submit" class="button-link " value="${newsFeed}"></input>
+					</form></li>
+					<li><form class="headerMenu" action="pages" method="post">
+						<input type="hidden" name="command" value="findfriends" /> 
+						<input type="submit" class="button-link " value="${findFriends}"></input>
+					</form></li>
+					<li><form class="headerMenu" action="pages" method="post">
+						<input type="hidden" name="command" value="findcommunity" /> 
+						<input type="submit" class="button-link " value="${findCommunity}"></input>
+					</form></li>
+					<li><form class="headerMenu" action="pages" method="post">
+						<input type="hidden" name="command" value="findcommunity" /> 
+						<input type="submit" class="button-link " value="${settings}"></input>
+					</form></li>
+					<li><form class="headerMenu" action="pages" method="post">
+						<input type="hidden" name="command" value="logOut" /> 
+						<input type="submit" class="button-link " value="${logOut}"></input>
+					</form></li>
+            
+          </ul>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+
+
+
+
+	<div class="bs-example">
+		<div id="kv-avatar-errors-2" class="center-block alert alert-block alert-danger" style="width: 800px; display: none"></div>
+		<form class="text-center" action="/file-avatar-upload-demo" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="_csrf" value="-hML0y-6hZnUznk_WQTrO1xzLsrSAkXfhsYBgcabgZrX_LCOOqqTZrs8zxqpuXJPrnmRElvIoNNJFhQpqgckyA==">
+			<div class="kv-avatar center-block" style="width: 280px">
+				<div class="file-input">
+					<div class="file-preview">
+						<div class="file-drop-disabled">
+							<div class="file-preview-thumbnails">
+								<div class="file-default-preview clickable" tabindex="-1">
+									<img src="/uploads/default_avatar_male.jpg" alt="Your Avatar" style="width: 160px">
+									<h6 class="text-muted">Click to select</h6>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+							<div class="file-preview-status text-center text-success"></div>
+							<div class="kv-fileinput-error"></div>
+						</div>
+					</div>
+					<button type="button" class="btn btn-default" title="Add picture tags" onclick="alert('Call your custom code here.')">
+						<i class="glyphicon glyphicon-tag"></i>
+					</button>
+					<button type="button" tabindex="500" title="Cancel or reset changes" class="btn btn-default fileinput-remove fileinput-remove-button">
+						<i class="glyphicon glyphicon-remove"></i>
+					</button>
+				</div>
+				<input id="avatar-2" name="avatar-2" type="file" class="" style="display: none;">
+			</div>
+		</form>
+	</div>
+
+
+
+
+
+
+	<!-- the avatar markup -->
+	<div id="kv-avatar-errors-2" class="center-block" style="width: 800px; display: none"></div>
+	<form class="text-center" action="pages" method="post" role="form" enctype="multipart/form-data">
+
+		<div class="kv-avatar center-block" style="width: 200px">
+			<input type="hidden" name="command" value="avatarUpload" /> <input id="avatar-23" name="avatar-2" type="file" class="file-loading"
+				accept="image/*"> <input type="submit" class="btn btn-success" value="save" />
+		</div>
+		<!-- include other inputs if needed and include a form submit (save) button -->
+	</form>
+	<!-- your server code `avatar_upload.php` will receive `$_FILES['avatar']` on form submission -->
+
+	<!-- the fileinput plugin initialization -->
+
+
+	<form class="navbar-form navbar-right" role="form" action="pages" method="post">
+		<input type="hidden" name="command" value="login" />
+		<div class="form-group">
+			<input type="email" placeholder="${loginText}" class="form-control" name="login" value="${userEmailLogin}" />&#160;
+		</div>
+		<div class="form-group">
+			<input type="password" placeholder="${passwordText}" class="form-control" name="password" />&#160;
+		</div>
+		<button type="submit" class="btn btn-success">${singInText}</button>
+	</form>
+
+
+
+
+	<script>
+		var btnCust = '<button type="button" class="btn btn-default" title="Add picture tags" '
+				+ 'onclick="alert(\'Call your custom code here.\')">'
+				+ '<i class="glyphicon glyphicon-tag"></i>' + '</button>';
+		$("#avatar-2")
+				.fileinput(
+						{
+							overwriteInitial : true,
+							maxFileSize : 1500,
+							showClose : false,
+							showCaption : false,
+							showBrowse : false,
+							browseOnZoneClick : true,
+							removeLabel : '',
+							removeIcon : '<i class="glyphicon glyphicon-remove"></i>',
+							removeTitle : 'Cancel or reset changes',
+							elErrorContainer : '#kv-avatar-errors-2',
+							msgErrorClass : 'alert alert-block alert-danger',
+							defaultPreviewContent : '<img src="/uploads/default_avatar_male.jpg" alt="Your Avatar" style="width:160px"><h6 class="text-muted">Click to select</h6>',
+							layoutTemplates : {
+								main2 : '{preview} ' + btnCust
+										+ ' {remove} {browse}'
+							},
+							allowedFileExtensions : [ "jpg", "png", "gif" ]
+						});
+	</script>
+
+
+
+
+
+
+
+
+</body>
+</html>

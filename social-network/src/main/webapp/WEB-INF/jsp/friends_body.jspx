@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    Document   : header
+    Created on : 05.01.2017, 21:05:23
+    Author     : Shpachenko Oleksii
+-->
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" version="2.0">
+
+	<jsp:directive.page contentType="text/html" pageEncoding="UTF-8" />
+
+	<fmt:setBundle basename="pagecontent" var="rb" />
+	<html>
+<head>
+<title>EsocNet</title>
+<!--<jsp:directive.tagLib prefix="greetingstag" uri="/WEB-INF/tlds/usergreetingstag.tld" /> -->
+
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="styles/mainStyle.css" media="screen" type="text/css" />
+<script type="text/javascript" src="js/jquery.js">
+	<jsp:text />
+</script>
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js">
+	<jsp:text />
+</script>
+
+</head>
+<body>
+	<fmt:message key="avatar.friends" bundle="${rb}" var="friends" />
+	<fmt:message key="friends.needToApprovefriends" bundle="${rb}" var="needToApprovefriends" />
+	<fmt:message key="friends.waitForAcceptfriends" bundle="${rb}" var="waitForAcceptfriends" />
+	<fmt:message key="friends.approveFriend" bundle="${rb}" var="approveFriend" />
+	<fmt:message key="findFriends.deleteFriend" bundle="${rb}" var="deleteFriend" />
+
+	<div class="jumbotron noPaddingTop">
+		<div class="container">
+
+			<c:if test="${not empty addFriendFailAlert}">
+				<div class="alert alert-danger alert-dismissible" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true"> &#10006;</span>
+					</button>
+					<strong>${addFriendFail} </strong>
+				</div>
+			</c:if>
+			<c:if test="${not empty addFriendSuccessAlert}">
+				<div class="alert alert-success alert-dismissible" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true"> &#10006;</span>
+					</button>
+					<strong>${addFriendSuccess} </strong>
+				</div>
+			</c:if>
+
+			<c:if test="${empty notMe}">
+				<c:if test="${fn:length(userNeedToApprove) > 0}">
+					<h3>${needToApprovefriends}</h3>
+					<div class="row">
+						<c:forEach var="elem" items="${userNeedToApprove}" varStatus="status">
+							<div class="col-sm-6 col-md-3">
+								<div class="thumbnail smallUser">
+
+									<form class="center" action="pages" method="post">
+										<input type="hidden" name="command" value="timeLine" /> <input type="hidden" name="userInfoId" value="${elem.userId}" /> <input type="image"
+											class="btn btn-default" src="${elem.avatarUrl}" width="125" height="auto" />
+									</form>
+									<div class="caption center">
+										<h4>${elem.userName}</h4>
+										<p>
+										<form class="headerMenu" action="pages" method="post">
+											<input type="hidden" name="command" value="approveFriend" /> <input type="hidden" name="friendEmail" value="${elem.userEmail}" /> <input
+												type="submit" class="btn btn-primary " value="${approveFriend}"></input>
+										</form>
+										</p>
+									</div>
+								</div>
+							</div>
+						</c:forEach>
+					</div>
+				</c:if>
+				<c:if test="${fn:length(userWaitForAccept) > 0}">
+					<h3>${waitForAcceptfriends}</h3>
+					<div class="row">
+						<c:forEach var="elem" items="${userWaitForAccept}" varStatus="status">
+							<div class="col-sm-6 col-md-3">
+								<div class="thumbnail smallUser">
+									<form class="center" action="pages" method="post">
+										<input type="hidden" name="command" value="timeLine" /> <input type="hidden" name="userInfoId" value="${elem.userId}" /> <input type="image"
+											class="btn btn-default" src="${elem.avatarUrl}" width="125" height="auto" />
+									</form>
+									<div class="caption center">
+										<h4>${elem.userName}</h4>
+										<p>
+										<form class="headerMenu" action="pages" method="post">
+											<input type="hidden" name="command" value="deleteFriend" /> <input type="hidden" name="friendEmail" value="${elem.userEmail}" /> <input
+												type="submit" class="btn btn-default " value="${deleteFriend}"></input>
+										</form>
+										</p>
+									</div>
+								</div>
+							</div>
+						</c:forEach>
+					</div>
+				</c:if>
+			</c:if>
+			<h3>${friends}</h3>
+			<div class="row">
+				<c:forEach var="elem" items="${userFriends}" varStatus="status">
+					<div class="col-sm-6 col-md-3">
+						<div class="thumbnail smallUser">
+							<form class="center" action="pages" method="post">
+								<input type="hidden" name="command" value="timeLine" /> <input type="hidden" name="userInfoId" value="${elem.userId}" /> <input type="image"
+									class="btn btn-default" src="${elem.avatarUrl}" width="125" height="auto" />
+							</form>
+							<div class="caption center">
+								<h4>${elem.userName}</h4>
+								<p>
+								<c:if test="${empty notMe}">
+								<form class="headerMenu" action="pages" method="post">
+									<input type="hidden" name="command" value="deleteFriend" /> <input type="hidden" name="friendEmail" value="${elem.userEmail}" /> <input
+										type="submit" class="btn btn-default " value="${deleteFriend}"></input>
+								</form>
+								</c:if>
+								</p>
+							</div>
+						</div>
+					</div>
+				</c:forEach>
+			</div>
+
+		</div>
+	</div>
+</body>
+	</html>
+
+</jsp:root>

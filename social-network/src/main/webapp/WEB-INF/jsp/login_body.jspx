@@ -39,7 +39,7 @@
 						</c:if>
 						<c:if test="${not empty registrationSuccess}">
 							<fmt:message key="login.registrationSuccess" bundle="${rb}" var="registrationSuccessText" />
-							<div class="alert alert-danger">
+							<div class="alert alert-success">
 								<strong>${registrationSuccessText} </strong>
 							</div>
 						</c:if>
@@ -79,7 +79,7 @@
 					<div class="form-group">
 						<label for="userName" class="col-md-3 control-label">${userNameText}</label>
 						<div class="col-md-9">
-							<input type="text" class="form-control" name="userName" placeholder="${userNameText}" value="${userName}" />
+							<input type="text" class="form-control" name="userName" placeholder="${userNameText}" value="${fn:escapeXml(userName)}" />
 							<c:if test="${not empty fillUserNameMessage}">
 							<fmt:message key="registration.fillUserNameMessage" bundle="${rb}" var="fillUserNameText" />
 							<div class="alert alert-danger">

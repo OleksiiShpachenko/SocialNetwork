@@ -12,8 +12,52 @@ background-color: #f0f9ff; /* Цвет линии */
 	padding-top: 51px;
 
 }
+.jumbotron p{
+	white-space:pre-wrap;
+	font:inherit;
+
+	}
 .bluebackground{
 	background-color: #3894b0;
+}
+.button-link {
+	background-size: cover;
+background-color: transparent;
+border: none;
+}
+
+.button-link:hover {
+
+text-decoration: underline;
+}
+.headerMenu{
+	margin-top: 14px;
+	margin-bottom: 0px;
+	
+}
+.headerMenu:hover{
+	color: white;
+	text-decoration:none;
+	cursor: pointer;
+	
+}
+.avatarMenu{
+	margin-top: 14px;
+	margin-bottom: 0px;
+	
+}
+.avatarMenu:hover{
+	text-decoration:none;
+	cursor: pointer;
+	
+}
+.avatar_name{
+	color: #3894b0;
+	font-weight: bold;
+	position: absolute;
+	top:185px;
+	left:260px;
+	
 }
 /* Sticky footer styles
 -------------------------------------------------- */
@@ -30,16 +74,91 @@ html {
   background-color: #f5f5f5;
 }
  
-.button-link {
-	background-size: cover;
-background-color: transparent;
-border: none;
-}
 
-.button-link:hover {
-
-text-decoration: underline;
-}
 #signupform{
 	margin-top: 40px;
 }
+
+
+.kv-avatar .file-preview-frame,.kv-avatar .file-preview-frame:hover {
+    margin: 0;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    text-align: center;
+}
+.kv-avatar .file-input {
+    display: table-cell;
+    max-width: 220px;
+}
+.bs-example{
+	margin-top: 200px;
+}
+.avatarbackground{
+	margin-top: 5px;
+	z-index:10;
+}
+.user_avatar_main{
+	width: 200px;
+	height: 200px;
+	z-index: 20;
+	position: absolute;
+	top:115px;
+	left:40px;
+}
+.thumbnail{
+	margin-bottom: 1px;
+}
+.smallUser{
+	width: 220px;
+	height: 230px;
+	
+	
+}
+.center{
+	margin: auto;
+	text-align: center;
+}
+.userinfo{
+	margin-left: 250px;
+}
+.posrelative{
+	position: relative;
+}
+.avatarUpload{
+	 position:absolute;
+   left:0;
+   top:0;
+   cursor:pointer;
+	
+} 
+.noPaddingBottom{
+	padding-bottom: 0px;
+}
+.noPaddingTop{
+	padding-top: 0px;
+}
+.noMarginBottom{
+	margin-bottom: 0px;
+}
+.noMarginTop{
+	margin-top: 0px;
+}
+.postText{
+	white-space:pre-wrap;
+	font:inherit;
+}
+.anchor{
+	padding-top: 200px;
+}
+.pagination form{
+	display:inherit;
+}
+.activePagination,.activePagination:hover {
+	color: #fff;
+	cursor: default;
+	background-color: #337ab7;
+ 
+  border-color: #337ab7;
+}
+

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    Document   : header
+    Created on : 05.01.2017, 21:05:23
+    Author     : Shpachenko Oleksii
+-->
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	 version="2.0">
+
+	<jsp:directive.page contentType="text/html" pageEncoding="UTF-8" />
+ 	
+	<fmt:setBundle basename="pagecontent" var="rb" />
+<html>
+<head>
+<title>EsocNet</title>
+ <!--<jsp:directive.tagLib prefix="greetingstag" uri="/WEB-INF/tlds/usergreetingstag.tld" /> -->
+  
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="styles/mainStyle.css" media="screen"	type="text/css" />
+
+
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js">
+	<jsp:text />
+</script>
+
+</head>
+<body>
+<fmt:message key="login.login" bundle="${rb}" var="loginText" />
+<fmt:message key="login.password" bundle="${rb}" var="passwordText" />
+<fmt:message key="login.signIn" bundle="${rb}" var="singInText" />
+<fmt:message key="header.newsFeed" bundle="${rb}" var="newsFeed" />
+<fmt:message key="header.findFriends" bundle="${rb}" var="findFriends" />
+<fmt:message key="header.findCommunity" bundle="${rb}" var="findCommunity" />
+<fmt:message key="header.settings" bundle="${rb}" var="settings" />
+<fmt:message key="header.logOut" bundle="${rb}" var="logOut" />
+  <!-- Fixed navbar -->
+    <div class="navbar navbar-inverse navbar-fixed-top bluebackground" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a  href="#"><IMG alt="EsocNet" src="images/logo_color.png" /></a>
+        </div>
+        <div class=" navbar-collapse right collapse">
+        <div class="col-md-4"><jsp:text /></div>
+        <div class="col-md-8">
+          <ul class="nav navbar-nav">
+            <li> <form class="headerMenu" action="pages" method="post">
+						<input type="hidden" name="command" value="timeLine" />
+						 <input type="submit"	class="button-link " value="${fn:escapeXml(userName)}"/>
+					</form></li>
+            <li><form class="headerMenu" action="pages" method="post">
+						<input type="hidden" name="command" value="newsFeed" /> 
+						<input type="submit" class="button-link " value="${newsFeed}"></input>
+					</form></li>
+					<li><form class="headerMenu" action="pages" method="post">
+						<input type="hidden" name="command" value="findFriends" /> 
+						<input type="submit" class="button-link " value="${findFriends}"></input>
+					</form></li>
+					<li><form class="headerMenu" action="pages" method="post">
+						<input type="hidden" name="command" value="findCommunity" /> 
+						<input type="submit" class="button-link " value="${findCommunity}"></input>
+					</form></li>
+					<li><form class="headerMenu" action="pages" method="post">
+						<input type="hidden" name="command" value="usersettings" /> 
+						<input type="submit" class="button-link " value="${settings}"></input>
+					</form></li>
+					<li><form class="headerMenu" action="pages" method="post">
+						<input type="hidden" name="command" value="logOut" /> 
+						<input type="submit" class="button-link " value="${logOut}"></input>
+					</form></li>
+            
+          </ul>
+          </div>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+
+
+</body>
+<script type="text/javascript" src="js/jquery.js">
+	<jsp:text />
+</script>
+	</html>
+
+</jsp:root>

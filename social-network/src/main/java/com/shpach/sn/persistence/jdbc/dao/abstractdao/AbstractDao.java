@@ -22,7 +22,7 @@ import com.shpach.sn.persistence.jdbc.connection.IConnectionPoolFactory;
 public abstract class AbstractDao<T> {
 	private IConnectionPoolFactory connectionFactory;
 
-	public List<T> findByDynamicSelect(String sql, String paramColumn, Object paramValue){
+	public List<T> findByDynamicSelect(String sql, String paramColumn, Object paramValue) {
 		try {
 
 			Connection cn = null;
@@ -73,7 +73,7 @@ public abstract class AbstractDao<T> {
 		return connectionFactory.getConnection();
 	}
 
-	public List<T> findByDynamicSelect(String sql, Object[] sqlParams){
+	public List<T> findByDynamicSelect(String sql, Object[] sqlParams) {
 
 		try {
 
@@ -246,6 +246,45 @@ public abstract class AbstractDao<T> {
 			resultList.add(dto);
 		}
 		return resultList;
+	}
+
+	protected int count(String tableName) {
+		String sql = "SELECT count(*) FROM " + tableName;
+		int res = -1;
+		try {
+			Connection cn = getConnection();
+			PreparedStatement st = null;
+			try {
+				st = cn.prepareStatement(sql);
+				ResultSet rs = null;
+				try {
+					rs = st.executeQuery();
+					while (rs.next()) {
+						res = rs.getInt(1);
+					}
+				} finally {
+					if (rs != null) {
+						rs.close();
+					}
+				}
+				return res;
+			} finally {
+				if (st != null) {
+					st.close();
+				}
+				if (cn != null) {
+					try {
+						cn.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return res;
+		}
 	}
 
 	/**

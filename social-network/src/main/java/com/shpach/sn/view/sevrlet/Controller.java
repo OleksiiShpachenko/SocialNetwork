@@ -1,8 +1,12 @@
 package com.shpach.sn.view.sevrlet;
 
 import java.io.IOException;
+import java.util.Enumeration;
+import java.util.List;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,13 +18,14 @@ import com.shpach.sn.command.ICommand;
 import com.shpach.sn.manager.Config;
 import com.shpach.sn.manager.Message;
 
-
-
 /**
  * @author Shpachenko_A_K
  *
  */
 @WebServlet(name = "Controller", urlPatterns = { "/pages" })
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 10, // 10 MB
+		maxFileSize = 1024 * 1024 * 50, // 50 MB
+		maxRequestSize = 1024 * 1024 * 100) // 100 MB
 public class Controller extends HttpServlet {
 	private static final Logger logger = Logger.getLogger(Controller.class);
 

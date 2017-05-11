@@ -1,5 +1,6 @@
 package com.shpach.sn.persistence.jdbc.dao.comment;
 
+import java.sql.Connection;
 import java.util.List;
 
 import com.shpach.sn.persistence.entities.Comment;
@@ -16,4 +17,6 @@ public interface ICommentDao {
 	public List<Comment> findCommentByPostId(int postId);
 
 	public boolean deleteCommentById(int id);
+
+	public boolean deleteCommentsByPostId(int postId, Connection cn);
 }

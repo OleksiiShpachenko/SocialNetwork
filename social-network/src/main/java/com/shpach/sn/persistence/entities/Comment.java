@@ -39,6 +39,7 @@ public class Comment implements Serializable {
 	private Date commentCreateDatetime;
 
 	public Comment() {
+		commentCreateDatetime=new Date();
 	}
 
 	public int getCommentId() {

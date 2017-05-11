@@ -35,14 +35,14 @@ public class MySqlFriendDao extends AbstractDao<Friend> implements IFriendDao {
 
 	protected static final String TABLE_NAME = "friend";
 
-	protected final String SQL_SELECT = "SELECT " + Columns.host_user_id.name() + ", " + Columns.slave_user_id.name()
-			+ ", " + Columns.friend_status.name() + ", " + Columns.friend_status_datetime.name() + " FROM " + TABLE_NAME
-			+ " ";
+	protected final String SQL_SELECT = "SELECT " + Columns.u1.name() + ", " + Columns.u2.name() + ", "
+			+ Columns.host_user_id.name() + ", " + Columns.slave_user_id.name() + ", " + Columns.friend_status.name()
+			+ ", " + Columns.friend_status_datetime.name() + " FROM " + TABLE_NAME + " ";
 
-	protected final String SQL_SELECT_WHERE = "SELECT " + Columns.host_user_id.name() + ", "
-			+ Columns.slave_user_id.name() + ", " + Columns.friend_status.name() + ", "
-			+ Columns.friend_status_datetime.name() + " FROM " + TABLE_NAME + " WHERE " + Columns.host_user_id.name()
-			+ "=? OR " + Columns.slave_user_id.name() + "=?";
+	protected final String SQL_SELECT_WHERE = "SELECT " + Columns.u1.name() + ", " + Columns.u2.name() + ", "
+			+ Columns.host_user_id.name() + ", " + Columns.slave_user_id.name() + ", " + Columns.friend_status.name()
+			+ ", " + Columns.friend_status_datetime.name() + " FROM " + TABLE_NAME + " WHERE "
+			+ Columns.host_user_id.name() + "=? OR " + Columns.slave_user_id.name() + "=?";
 
 	protected final String SQL_INSERT = "INSERT INTO " + TABLE_NAME + " (" + Columns.host_user_id.name() + ", "
 			+ Columns.slave_user_id.name() + ", " + Columns.friend_status.name() + ", "
@@ -52,6 +52,9 @@ public class MySqlFriendDao extends AbstractDao<Friend> implements IFriendDao {
 			+ Columns.slave_user_id.name() + "=?, " + Columns.friend_status.name() + "=?, "
 			+ Columns.friend_status_datetime.name() + "=? WHERE " + Columns.u1.name() + "=LEAST(?, ?) AND "
 			+ Columns.u2.name() + "=GREATEST(?, ?)";
+
+	protected final String SQL_DELETE = "DELETE FROM " + TABLE_NAME + " WHERE " + Columns.u1.name()
+			+ "=LEAST(?, ?) AND " + Columns.u2.name() + "=GREATEST(?, ?)";
 
 	private static MySqlFriendDao instance = null;
 
@@ -110,7 +113,7 @@ public class MySqlFriendDao extends AbstractDao<Friend> implements IFriendDao {
 	@Override
 	public List<Friend> findFriendByUserId(int userId) {
 		List<Friend> res = null;
-		res = findByDynamicSelect(SQL_SELECT_WHERE, new Object[] { userId });
+		res = findByDynamicSelect(SQL_SELECT_WHERE, new Object[] { userId, userId });
 		if (res != null && res.size() > 0)
 			return res;
 		return new ArrayList<Friend>();
@@ -118,8 +121,7 @@ public class MySqlFriendDao extends AbstractDao<Friend> implements IFriendDao {
 
 	@Override
 	public boolean deleteFriendByUsersId(int userId_1, int userId_2) {
-		// TODO Auto-generated method stub
-		return false;
+		return dynamicUpdate(SQL_DELETE, new Object[] { userId_1, userId_2, userId_1, userId_2 });
 	}
 
 	@Override

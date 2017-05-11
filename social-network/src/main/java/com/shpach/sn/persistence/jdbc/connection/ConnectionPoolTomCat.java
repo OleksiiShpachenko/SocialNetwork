@@ -80,6 +80,7 @@ public class ConnectionPoolTomCat implements IConnectionPool {
 			Context initContext = new InitialContext();
 			Context envContext = (Context) initContext.lookup(TOMCAT_JNDI_NAME);
 			pool = (DataSource) envContext.lookup(DATASOURCE);
+			
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}

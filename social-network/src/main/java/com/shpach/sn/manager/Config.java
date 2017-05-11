@@ -32,6 +32,14 @@ public class Config {
 	public static final String STUDENT_TESTS = "STUDENT_TESTS";
 	public static final String STUDENT_STATISTIC = "STUDENT_STATISTIC";
 	public static final String TUTOR_STATISTIC = "TUTOR_STATISTIC";
+	public static final String HOME_PAGE = "HOME_PAGE";
+	public static final String DEFAULT_AVATAR = "DEFAULT_AVATAR";
+	public static final String USER_SETTINGS = "USER_SETTINGS";
+	public static final String AVATAR_UPLOAD_DIR = "AVATAR_UPLOAD_DIR";
+	public static final String FIND_FRIENDS = "FIND_FRIENDS";
+	public static final String FRIENDS = "FRIENDS";
+	public static final String TIMELINE = "TIMELINE";
+	public static final String NEWS_FEED = "NEWS_FEED";
 
     public static Config getInstance() {
         if (instance == null) {

@@ -46,10 +46,13 @@
 
 			</ul>
 
-			<p class="text-muted">EPAM training web project.</p>
+			<p class="text-muted">Training web project. Author Oleksii Shpachenko.</p>
 		</div>
 	</div>
 </body>
+<script type="text/javascript" src="js/jquery.js">
+	<jsp:text />
+</script>
 	</html>
 
 </jsp:root>

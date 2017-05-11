@@ -50,6 +50,7 @@ public class Post implements Serializable {
 	private Date postCreateDatetime;
 
 	public Post() {
+		postCreateDatetime=new Date();
 	}
 
 	public int getPostId() {

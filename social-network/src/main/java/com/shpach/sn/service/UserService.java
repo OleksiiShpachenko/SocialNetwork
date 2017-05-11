@@ -1,14 +1,20 @@
 package com.shpach.sn.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.shpach.sn.persistence.entities.Comment;
+import com.shpach.sn.persistence.entities.Friend;
+import com.shpach.sn.persistence.entities.Post;
 import com.shpach.sn.persistence.entities.User;
 import com.shpach.sn.persistence.jdbc.connection.ConnectionPoolTomCatFactory;
 import com.shpach.sn.persistence.jdbc.connection.IConnectionPoolFactory;
 import com.shpach.sn.persistence.jdbc.dao.factory.IDaoFactory;
 import com.shpach.sn.persistence.jdbc.dao.factory.MySqlDaoFactory;
 import com.shpach.sn.persistence.jdbc.dao.user.IUserDao;
+
 
 
 //import com.shpach.tutor.persistance.entities.Community;
@@ -28,7 +34,7 @@ public class UserService {
 	private static UserService instance = null;
 	private IUserDao userDao;
 	private IConnectionPoolFactory connectionFactory;
-	//private TaskService taskService;
+	private FriendService friendService;
 
 	private UserService() {
 		IDaoFactory daoFactory = new MySqlDaoFactory();
@@ -43,11 +49,25 @@ public class UserService {
 		return instance;
 	}
 	
+	private FriendService getFriendService() {
+		if (friendService == null)
+			friendService = FriendService.getInstance();
+		return friendService;
+	}
+	
 	public IConnectionPoolFactory getConnectionFactory() {
 		if (connectionFactory == null) {
 			connectionFactory = (IConnectionPoolFactory) new ConnectionPoolTomCatFactory();
 		}
 		return connectionFactory;
+	}
+
+	private IUserDao getUserDao() {
+		if (userDao == null){
+			IDaoFactory daoFactory = new MySqlDaoFactory();
+			userDao = daoFactory.getUserDao();
+		}
+		return userDao;
 	}
 
 	/**
@@ -60,7 +80,7 @@ public class UserService {
 	public User getUserByLogin(String login) {
 		if (login==null)
 			return null;
-		User userEntitie = userDao.findUserByEmail(login);
+		User userEntitie = getUserDao().findUserByEmail(login);
 		return userEntitie;
 	}
 
@@ -86,7 +106,7 @@ public class UserService {
 	public boolean addNewUser(User user) {
 		if (user==null)
 			return false;
-		User userAppdated = userDao.addOrUpdate(user);
+		User userAppdated = getUserDao().addOrUpdate(user);
 		if (userAppdated == null)
 			return false;
 		return true;
@@ -110,7 +130,7 @@ public class UserService {
 //	}
 
 	public boolean validateUserName(String testString) {
-		Pattern p = Pattern.compile("[A-z,À-ÿ,0-9,¸¨³²¿¯']{1,128}");
+		Pattern p = Pattern.compile("^[à-ÿÀ-ß¸¨ÙÜüÞþßÿ¯¿²³ªº¥´'a-zA-Z0-9 ]{1,128}");
 		Matcher m = p.matcher(testString);
 		return m.matches();
 	}
@@ -120,5 +140,107 @@ public class UserService {
 		Matcher m = p.matcher(userPassword);
 		return m.matches();
 	}
+
+	/**
+	 * Return all {@link User}
+	 * @param startFrom  
+	 * @param limit
+	 * @return
+	 */
+	public List<User> findAllExcludMe(int userId,int startFrom, int limit) {
+		return  getUserDao().findAllExcludMe(userId,startFrom, limit);
+	}
+
+	public void injectToUserFriendRelationshipIfExist(List<Friend> friends, List<User> users) {
+		for (User user : users) {
+			for (Friend friend : friends) {
+				if (friend.getHostUserId()==user.getUserId() || friend.getSlaveUserId()==user.getUserId())
+				user.addFriends1(friend);
+			}
+		}
+		
+	}
+
+	/**Inject to {@link user} collection of related {@link Friend}
+	 * @param user
+	 */
+	public void injectFriendToUser(User user) {
+		List<Friend> friends=getFriendService().getFriendByUserId(user.getUserId());
+		if (friends!=null && friends.size()>0)
+		user.setFriends(friends);
+	}
+
+	public List<User> getUserFriendsCollection(User user) {
+		List<User> res=new ArrayList<>();
+		for (Friend friend : user.getFriends()) {
+			if(friend.getFriendStatus()!=FriendService.friendStatus.FRIEND.ordinal())
+				continue;
+			if(friend.getHostUserId()==user.getUserId())
+				res.add(friend.getSlaveUser());
+			else
+				res.add(friend.getHostUser());
+		}
+		return res;
+	}
+
+	public void injectSecondUserToFriend(User user) {
+		for (Friend friend : user.getFriends()) {
+			if(friend.getHostUserId()==user.getUserId()){
+				friend.setHostUser(user);
+				User slaveUser=getUserById(friend.getSlaveUserId());
+				friend.setSlaveUser(slaveUser);
+			}else{
+				friend.setSlaveUser(user);
+				User hostUser=getUserById(friend.getHostUserId());
+				friend.setHostUser(hostUser);
+			}
+		}
+		
+	}
+
+	public User getUserById(int userId) {
+		return  getUserDao().findUserById(userId);
+	}
+
+	public List<User> getUserNeedApproveFriendsCollection(User user) {
+		List<User> res=new ArrayList<>();
+		for (Friend friend : user.getFriends()) {
+			if(friend.getFriendStatus()==FriendService.friendStatus.WAIT.ordinal() && friend.getSlaveUserId()==user.getUserId())
+				res.add(friend.getHostUser());
+		}
+		return res;
+	}
+
+	public List<User> getUseWaitForAcceptFriendsCollection(User user) {
+		List<User> res=new ArrayList<>();
+		for (Friend friend : user.getFriends()) {
+			if(friend.getFriendStatus()==FriendService.friendStatus.WAIT.ordinal() && friend.getHostUserId()==user.getUserId())
+				res.add(friend.getSlaveUser());
+		}
+		return res;
+	}
+
+	public void injectUserToComment(List<Comment> comments) {
+		for (Comment comment : comments) {
+			User user=getUserDao().findUserById(comment.getUserId());
+			comment.setUser(user);
+		}
+		
+	}
+
+	public void injectUserToPost(List<Post> newsFeed) {
+		for (Post post : newsFeed) {
+			User user=getUserDao().findUserById(post.getUserId());
+			post.setUser(user);
+		}
+		
+	}
+
+	public int coutUsers() {
+		return getUserDao().count();
+		
+	}
+
+	
 
 }

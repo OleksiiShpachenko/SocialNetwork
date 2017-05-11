@@ -4,6 +4,7 @@ package com.shpach.sn.persistence.entities;
 import java.io.Serializable;
 import javax.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -70,7 +71,7 @@ public class User implements Serializable {
 
 	//bi-directional many-to-one association to Friend
 	@OneToMany(mappedBy="user1")
-	private List<Friend> friends1;
+	private List<Friend> friends;
 
 	//bi-directional many-to-one association to Friend
 	@OneToMany(mappedBy="user2")
@@ -88,6 +89,7 @@ public class User implements Serializable {
 		userCreateCommunityPermition=1;
 		userCommentPermition=1;
 		userActive=1;
+		friends= new ArrayList<Friend>();
 	}
 
 	public int getUserId() {
@@ -222,24 +224,24 @@ public class User implements Serializable {
 		return communityMember;
 	}
 
-	public List<Friend> getFriends1() {
-		return this.friends1;
+	public List<Friend> getFriends() {
+		return this.friends;
 	}
 
-	public void setFriends1(List<Friend> friends1) {
-		this.friends1 = friends1;
+	public void setFriends(List<Friend> friends1) {
+		this.friends = friends1;
 	}
 
 	public Friend addFriends1(Friend friends1) {
-		getFriends1().add(friends1);
-		friends1.setHostUser(this);
+		getFriends().add(friends1);
+	//	friends1.setHostUser(this);
 
 		return friends1;
 	}
 
 	public Friend removeFriends1(Friend friends1) {
-		getFriends1().remove(friends1);
-		friends1.setHostUser(null);
+		getFriends().remove(friends1);
+	//	friends1.setHostUser(null);
 
 		return friends1;
 	}

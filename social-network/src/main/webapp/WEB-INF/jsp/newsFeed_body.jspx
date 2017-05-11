@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    Document   : header
+    Created on : 05.01.2017, 21:05:23
+    Author     : Shpachenko Oleksii
+-->
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" version="2.0">
+
+	<jsp:directive.page contentType="text/html" pageEncoding="UTF-8" />
+
+	<fmt:setBundle basename="pagecontent" var="rb" />
+	<html>
+<head>
+<title>EsocNet</title>
+<!--<jsp:directive.tagLib prefix="greetingstag" uri="/WEB-INF/tlds/usergreetingstag.tld" /> -->
+
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="styles/mainStyle.css" media="screen" type="text/css" />
+<script type="text/javascript" src="js/jquery.js">
+	<jsp:text />
+</script>
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js">
+	<jsp:text />
+</script>
+
+</head>
+<body>
+	<fmt:message key="avatar.friends" bundle="${rb}" var="friends" />
+	<fmt:message key="post.placeHolderPost" bundle="${rb}" var="placeHolderPost" />
+	<fmt:message key="post.publish" bundle="${rb}" var="publish" />
+	<fmt:message key="post.placeHolderComment" bundle="${rb}" var="placeHolderComment" />
+	<fmt:message key="friends.approveFriend" bundle="${rb}" var="approveFriend" />
+	<fmt:message key="findFriends.deleteFriend" bundle="${rb}" var="deleteFriend" />
+	<fmt:message key="header.newsFeed" bundle="${rb}" var="newsFeedText" />
+
+
+	<div class="jumbotron ">
+		<div class="container">
+
+			<c:if test="${not empty addFriendFailAlert}">
+				<div class="alert alert-danger alert-dismissible" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true"> &#10006;</span>
+					</button>
+					<strong>${addFriendFail} </strong>
+				</div>
+			</c:if>
+			<c:if test="${not empty addFriendSuccessAlert}">
+				<div class="alert alert-success alert-dismissible" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true"> &#10006;</span>
+					</button>
+					<strong>${addFriendSuccess} </strong>
+				</div>
+			</c:if>
+
+			<div class="col-md-offset-2 col-md-8">
+				<h3>${newsFeedText}</h3>
+			</div>
+			<c:forEach var="elem" items="${newsFeed}" varStatus="status">
+				<div>
+					<div class="panel panel-default col-md-offset-2 col-md-8">
+						<div class="panel-body ">
+
+
+							<div class="col-md-12">
+								<p class="postText">
+									<b>${fn:escapeXml(elem.user.userName)}</b><br />
+								<p style="color: gray;">
+									<fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${elem.postCreateDatetime}" />
+								</p>
+								${fn:escapeXml(elem.postText)}
+								</p>
+
+								<c:forEach var="elemComment" items="${elem.comments}" varStatus="status">
+									<span class="anchor" id="comment_${elemComment.commentId}"><jsp:text /></span>
+									<p class="postText">
+										<b>${fn:escapeXml(elemComment.user.userName)}</b>&#160;<span style="color: gray;"><fmt:formatDate pattern="yyyy-MM-dd HH:mm"
+												value="${elemComment.commentCreateDatetime}" /></span>&#160;${fn:escapeXml(elemComment.commentText)}
+									</p>
+								</c:forEach>
+								<form class="form-horizontal noMarginTop " role="form" action="pages" method="post">
+									<input type="hidden" name="command" value="addComment" /> <input type="hidden" name="postId" value="${elem.postId}" />
+									<div class="form-horizontal">
+										<div class="form-group">
+											<div class="">
+												<textarea class="form-control" name="commentText" rows="1" placeholder="${placeHolderComment}" required="required"><jsp:text /></textarea>
+											</div>
+										</div>
+										<div class="form-group">
+											<!-- Button -->
+											<fmt:message key="login.enter" bundle="${rb}" var="enterText" />
+											<div class="">
+												<button id="btn-signup" type="submit" class="btn btn-info">
+													<i class="icon-hand-right"></i> &#160;${publish}
+												</button>
+
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</c:forEach>
+
+
+
+		</div>
+	</div>
+</body>
+<c:if test="${not empty createdCommentId}">
+	<script type="text/javascript">
+		window.onload = function() {
+			window.location.href = "#comment_${createdCommentId}";
+		}
+	</script>
+</c:if>
+	</html>
+
+</jsp:root>

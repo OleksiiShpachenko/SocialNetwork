@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    Document   : header
+    Created on : 05.01.2017, 21:05:23
+    Author     : Shpachenko Oleksii
+-->
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" version="2.0">
+
+	<jsp:directive.page contentType="text/html" pageEncoding="UTF-8" />
+
+	<fmt:setBundle basename="pagecontent" var="rb" />
+	<html>
+<head>
+<title>EsocNet</title>
+<!--<jsp:directive.tagLib prefix="greetingstag" uri="/WEB-INF/tlds/usergreetingstag.tld" /> -->
+
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="styles/mainStyle.css" media="screen" type="text/css" />
+
+
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js">
+<jsp:text />
+</script>
+
+</head>
+<body>
+	<div class="jumbotron">
+		<div class="container">
+			<form id="signupform" class="form-horizontal" role="form" action="pages" method="post" enctype="multipart/form-data">
+				<input type="hidden" name="command" value="usersettings" />
+				<input type="hidden" name="savesettings" value="true" />
+				<div id="signupalert" style="display: none" class="alert alert-danger">
+					<p>Error:</p>
+					<span></span>
+				</div>
+				<fmt:message key="registration.userName" bundle="${rb}" var="userNameText" />
+				<fmt:message key="settings.userAvatar" bundle="${rb}" var="userAvatar" />
+				<fmt:message key="settings.saveSettings" bundle="${rb}" var="saveSettings" />
+				<fmt:message key="login.login" bundle="${rb}" var="loginText" />
+				<fmt:message key="login.password" bundle="${rb}" var="passwordText" />
+				<fmt:message key="login.confirmPassword" bundle="${rb}" var="confirmPasswordText" />
+
+				<div class="form-group">
+					<label for="email" class="col-md-3 control-label">${loginText}</label>
+					<div class="col-md-9">
+						<input type="email" class="form-control" name="userEmailNew" value="${fn:escapeXml(userEntity.userEmail)}" />
+						<c:if test="${not empty fillCorrectEmailMessage}">
+							<fmt:message key="registration.fillUserEmailMessage" bundle="${rb}" var="fillEmailText" />
+							<div class="alert alert-danger">
+								<strong>${fillEmailText}</strong>
+							</div>
+						</c:if>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="userName" class="col-md-3 control-label">${userNameText}</label>
+					<div class="col-md-9">
+						<input type="text" class="form-control" name="userNameNew" value="${fn:escapeXml(userEntity.userName)}" />
+						<c:if test="${not empty fillUserNameMessage}">
+							<fmt:message key="registration.fillUserNameMessage" bundle="${rb}" var="fillUserNameText" />
+							<div class="alert alert-danger">
+								<strong>${fillUserNameText}</strong>
+							</div>
+						</c:if>
+					</div>
+				</div>
+				<!--<div class="form-group">
+							<label for="lastname" class="col-md-3 control-label">Last
+								Name</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" name="lastname"
+									placeholder="Last Name" />
+							</div>
+						</div>
+						-->
+				<!-- 
+					<div class="form-group">
+						<label for="password" class="col-md-3 control-label">${passwordText}</label>
+						<div class="col-md-9">
+							<input type="password" class="form-control" name="password" placeholder="${passwordText}" />
+						
+					<c:if test="${not empty fillCorrectPasswordMessage}">
+							<fmt:message key="registration.fillPasswordMessage" bundle="${rb}" var="fillPasswordText" />
+							<div class="alert alert-danger">
+								<strong>${fillPasswordText}</strong>
+							</div>
+						</c:if>
+						</div>
+					</div>
+					-->
+				<!--
+						<div class="form-group">
+							<label for="icode" class="col-md-3 control-label">Invitation
+								Code</label>
+							<div class="col-md-9">
+								<input type="text" class="form-control" name="icode"
+									placeholder="" />
+							</div>
+						</div>
+						-->
+				<div class="form-group">
+					<label for="userName" class="col-md-3 control-label">${userAvatar}</label>
+					<div class="col-md-9">
+						<input id="avatar-23" name="avatar-2" type="file" class="file-loading" accept="image/*" /> 
+						<div class="file-input file-input-new">
+							<div class="kv-upload-progress hide">
+								<div class="progress">
+									<div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0"
+										aria-valuemax="100" style="width: 0%;">0%</div>
+								</div>
+							</div>
+							<div class="input-group file-caption-main">
+								<div tabindex="500" class="form-control file-caption  kv-fileinput-caption">
+									<div class="file-caption-name"><jsp:text /></div>
+								</div>
+
+								<div class="input-group-btn">
+									
+									
+									<div tabindex="500" class="btn btn-primary btn-file posrelative">
+										<i class="glyphicon glyphicon-folder-open"><jsp:text /></i> <span class="hidden-xs">Browse …</span>
+										<input id="input-1a" type="file" class="file avatarUpload" data-show-preview="false" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+
+
+				<div class="form-group">
+					<!-- Button -->
+					
+					<div class="col-md-offset-3 col-md-9">
+						<button id="btn-signup" type="submit" class="btn btn-info">
+							<i class="icon-hand-right"></i> &#160;${saveSettings}
+						</button>
+
+					</div>
+				</div>
+				<!--
+					<div style="border-top: 1px solid #999; padding-top: 20px" class="form-group">
+										
+							<div class="col-md-offset-3 col-md-9">
+								<button id="btn-fbsignup" type="button" class="btn btn-primary">
+									<i class="icon-facebook"></i>   Sign Up with Facebook
+								</button>
+							</div>
+							
+					</div>
+-->
+			</form>
+
+		</div>
+	</div>
+
+
+
+
+</body>
+	</html>
+
+</jsp:root>

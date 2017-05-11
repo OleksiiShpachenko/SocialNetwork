@@ -1,5 +1,6 @@
 package com.shpach.sn.persistence.jdbc.dao.comment;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -45,6 +46,9 @@ public class MySqlCommentDao extends AbstractDao<Comment> implements ICommentDao
 	protected final String SQL_UPDATE = "UPDATE " + TABLE_NAME + " SET " + Columns.post_id.name() + "=?, "
 			+ Columns.user_id.name() + "=?, " + Columns.comment_text.name() + "=?, "
 			+ Columns.comment_create_datetime.name() + "=? WHERE " + Columns.comment_id.name() + "=?";
+	
+	protected final String SQL_DELETE_BY_POST_ID = "DELETE FROM " + TABLE_NAME + " WHERE " + Columns.post_id.name()
+	+ "=?";
 
 	private static MySqlCommentDao instance = null;
 
@@ -130,6 +134,8 @@ public class MySqlCommentDao extends AbstractDao<Comment> implements ICommentDao
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	
 
 	@Override
 	public Comment populateDto(ResultSet rs) throws SQLException {
@@ -140,6 +146,11 @@ public class MySqlCommentDao extends AbstractDao<Comment> implements ICommentDao
 		dto.setCommentText(rs.getString(Columns.comment_text.getId()));
 		dto.setCommentCreateDatetime(new Date(rs.getTimestamp(Columns.comment_create_datetime.getId()).getTime()));
 		return dto;
+	}
+
+	@Override
+	public boolean deleteCommentsByPostId(int postId, Connection cn) {
+		return dynamicUpdate(SQL_DELETE_BY_POST_ID, cn, new Object[] {postId});
 	}
 
 }

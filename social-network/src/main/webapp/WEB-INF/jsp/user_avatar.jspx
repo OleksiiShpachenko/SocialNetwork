@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    Document   : header
+    Created on : 05.01.2017, 21:05:23
+    Author     : Shpachenko Oleksii
+-->
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" version="2.0">
+
+	<jsp:directive.page contentType="text/html" pageEncoding="UTF-8" />
+
+	<fmt:setBundle basename="pagecontent" var="rb" />
+	<html>
+<head>
+<title>EsocNet</title>
+<!--<jsp:directive.tagLib prefix="greetingstag" uri="/WEB-INF/tlds/usergreetingstag.tld" /> -->
+
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="styles/mainStyle.css" media="screen" type="text/css" />
+
+
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js">
+	<jsp:text />
+</script>
+
+</head>
+<body>
+	<div class="jumbotron noPaddingBottom noMarginBottom">
+		<div class="container" style="position: relative;">
+			<fmt:message key="avatar.timeline" bundle="${rb}" var="timeLine" />
+			<fmt:message key="avatar.friends" bundle="${rb}" var="friends" />
+			<fmt:message key="avatar.photos" bundle="${rb}" var="photos" />
+			<fmt:message key="avatar.communities" bundle="${rb}" var="communities" />
+			<div class="user_avatar_main">
+				<IMG class="thumbnail img-responsive" alt="" src="${userInfo.avatarUrl}" width="200" height="200" />
+			</div>
+			<div class="avatarbackground">
+				<IMG class="thumbnail img-responsive" alt="" src="images/user_background.png" width="1140" height="200" />
+			</div>
+			<div class="avatar_name">
+				<h2>${fn:escapeXml(userInfo.userName)}</h2>
+			</div>
+			<div class="navbar navbar-default" role="navigation">
+				<ul class="list-inline userinfo">
+					<li>
+						<form class="avatarMenu" action="pages" method="post">
+							<input type="hidden" name="command" value="timeLine" /> 
+							<input type="hidden" name="userInfoId" value="${userInfo.userId}" />
+							<input type="submit" class="button-link " value="${timeLine}" />
+						</form>
+					</li>
+					<li><form class="avatarMenu" action="pages" method="post">
+							<input type="hidden" name="command" value="friends" /> 
+							<input type="hidden" name="userInfoId" value="${userInfo.userId}" /><input type="submit" class="button-link " value="${friends}"></input>
+						</form></li>
+					<li><form class="avatarMenu" action="pages" method="post">
+							<input type="hidden" name="command" value="findfriends" /> <input type="submit" class="button-link " value="${photos}"></input>
+						</form></li>
+					<li><form class="avatarMenu" action="pages" method="post">
+							<input type="hidden" name="command" value="findcommunity" /> <input type="submit" class="button-link " value="${communities}"></input>
+						</form></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+<script type="text/javascript" src="js/jquery.js">
+	<jsp:text />
+</script>
+	</html>
+
+</jsp:root>

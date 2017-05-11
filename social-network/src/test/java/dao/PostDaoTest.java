@@ -202,7 +202,7 @@ public class PostDaoTest extends DaoTest {
 	@Test
 	public void deletePostByIdOk() throws SQLException, NamingException {
 
-		boolean res = spyPostDao.deletePostById(1);
+		boolean res = spyPostDao.deletePostById(1, anyObject());
 
 		assertTrue(res);
 	}

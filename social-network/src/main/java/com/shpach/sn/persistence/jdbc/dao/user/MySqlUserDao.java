@@ -42,6 +42,7 @@ public class MySqlUserDao extends AbstractDao<User> implements IUserDao {
 	protected static final String TABLE_RELATIONSHIP_LIKES = "relationship_likes";
 	protected static final String TABLE_USER_TO_USER_ROLE = "relationship_user_to_user_role";
 	private static final int USER_ROLE_USER = 2;
+	
 	protected final String SQL_SELECT = "SELECT " + Columns.user_id.name() + ", " + Columns.user_login.name() + ", "
 			+ Columns.user_password.name() + ", " + Columns.user_name.name() + ", " + Columns.user_email.name() + ", "
 			+ Columns.avatar_url.name() + ", " + Columns.user_active.name() + ", " + Columns.user_post_permition.name()
@@ -49,15 +50,17 @@ public class MySqlUserDao extends AbstractDao<User> implements IUserDao {
 			+ Columns.user_create_community_permition.name() + ", " + Columns.user_create_datetime.name() + " FROM "
 			+ TABLE_NAME + "";
 
+	private  final String SQL_SELECT_ALL_EXCLUDE_ME_LIMIT =SQL_SELECT+ " WHERE " + Columns.user_id.name() + "!=? LIMIT ?, ?";
+	
 	protected final String SQL_INSERT = "INSERT INTO " + TABLE_NAME + " (" + Columns.user_login.name() + ", "
 			+ Columns.user_password.name() + ", " + Columns.user_name.name() + ", " + Columns.user_email.name() + ", "
 			+ Columns.avatar_url.name() + ", " + Columns.user_active.name() + ", " + Columns.user_post_permition.name()
 			+ ", " + Columns.user_invite_permition.name() + ", " + Columns.user_comment_permition.name() + ", "
 			+ Columns.user_create_community_permition.name() + ", " + Columns.user_create_datetime.name()
 			+ ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	
-	protected final String SQL_INSERT_USER_ROLE_RELATOINSHIP = "INSERT INTO " + TABLE_USER_TO_USER_ROLE + " (" + Columns.user_id.name() + ", "
-			+  " user_role_id " + ") VALUES (?, ?)";
+
+	protected final String SQL_INSERT_USER_ROLE_RELATOINSHIP = "INSERT INTO " + TABLE_USER_TO_USER_ROLE + " ("
+			+ Columns.user_id.name() + ", " + " user_role_id " + ") VALUES (?, ?)";
 
 	protected final String SQL_UPDATE = "UPDATE " + TABLE_NAME + " SET " + Columns.user_login.name() + "=?, "
 			+ Columns.user_password.name() + "=?, " + Columns.user_name.name() + "=?, " + Columns.user_email.name()
@@ -98,7 +101,16 @@ public class MySqlUserDao extends AbstractDao<User> implements IUserDao {
 	public List<User> findAll() {
 		return findByDynamicSelect(SQL_SELECT, null, null);
 	}
-
+	
+	
+	public List<User> findAllExcludMe(int userId,int startFrom, int limit) {
+		List<User> res = null;
+		res = findByDynamicSelect(SQL_SELECT_ALL_EXCLUDE_ME_LIMIT, new Integer[] {userId, startFrom, limit }); //startFrom+limit });
+		if (res != null && res.size() > 0)
+			return res;
+		return new ArrayList<User>();
+	}
+	
 	public User addOrUpdate(User user) {
 		boolean res = false;
 		if (user.getUserId() == 0) {
@@ -138,8 +150,8 @@ public class MySqlUserDao extends AbstractDao<User> implements IUserDao {
 				cn.rollback();
 				return false;
 			}
-			id=dynamicAdd(SQL_INSERT_USER_ROLE_RELATOINSHIP, cn, new Object[] {user.getUserId(), USER_ROLE_USER });
-			if (id<0){
+			id = dynamicAdd(SQL_INSERT_USER_ROLE_RELATOINSHIP, cn, new Object[] { user.getUserId(), USER_ROLE_USER });
+			if (id < 0) {
 				cn.rollback();
 				return false;
 			}
@@ -150,8 +162,9 @@ public class MySqlUserDao extends AbstractDao<User> implements IUserDao {
 		} finally {
 			try {
 				cn.setAutoCommit(true);
+				if (cn!=null)
 				cn.close();
-			} catch (SQLException | NullPointerException e ) {
+			} catch (SQLException | NullPointerException e) {
 				e.printStackTrace();
 			}
 
@@ -213,6 +226,13 @@ public class MySqlUserDao extends AbstractDao<User> implements IUserDao {
 			return res;
 		return new ArrayList<User>();
 	}
+
+	@Override
+	public int count() {
+		return count(TABLE_NAME);
+	}
+
+	
 
 	// @Override
 	// public List<User> findUsersByCommunityId(int id) {

@@ -36,6 +36,7 @@ public class Friend implements Serializable {
 	private int slaveUserId;
 
 	public Friend() {
+		friendStatusDatetime=new Date();
 	}
 
 	// public FriendPK getId() {

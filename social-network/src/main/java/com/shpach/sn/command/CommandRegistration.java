@@ -61,6 +61,7 @@ public class CommandRegistration implements ICommand {
 				user.setUserEmail(userEmail);
 				user.setUserName(userName);
 				user.setUserPassword(userPassword);
+				user.setAvatarUrl(Config.getInstance().getProperty(Config.DEFAULT_AVATAR));
 				//user.setRoleId(userRoleInt);
 				if (UserService.getInstance().addNewUser(user)) {
 					logger.info("new user succefull added. User email:" + userEmail);
