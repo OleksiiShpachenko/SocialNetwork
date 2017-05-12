@@ -37,6 +37,7 @@ public class MySqlPostDao extends AbstractDao<Post> implements IPostDao {
 	}
 
 	protected static final String TABLE_NAME = "post";
+	protected final String LIMIT = " LIMIT ?, ?";
 	protected final String SQL_SELECT = "SELECT " + Columns.post_id.name() + ", " + Columns.user_id.name() + ", "
 			+ Columns.community_id.name() + ", " + Columns.post_text.name() + ", " + Columns.post_create_datetime.name()
 			+ " FROM " + TABLE_NAME + "";
@@ -168,19 +169,21 @@ public class MySqlPostDao extends AbstractDao<Post> implements IPostDao {
 	}
 
 	@Override
-	public List<Post> findPostByUserId(List<Integer> usersId) {
+	public List<Post> findPostByUserId(List<Integer> usersId,int startFrom, int itemsOnPage) {
 		List<Post> posts = new ArrayList<>();
 		if (usersId == null)
 			return posts;
-		Object[] sqlParams = new Object[usersId.size()];
+		Object[] sqlParams = new Object[usersId.size()+2];
 		sqlParams = usersId.toArray(sqlParams);
+		sqlParams[sqlParams.length-2]=startFrom;
+		sqlParams[sqlParams.length-1]=itemsOnPage;
 		String sql = SQL_SELECT + WHERE_USER_ID_IN + " (";
 		for (int i = 0; i < usersId.size(); i++) {
 			sql += "?";
 			if (i < (usersId.size() - 1))
 				sql += ", ";
 			else
-				sql += ") " + ORDER_BY_CREATION_TIME;
+				sql += ") " + ORDER_BY_CREATION_TIME+LIMIT;
 		}
 		posts = findByDynamicSelect(sql, sqlParams);
 		if (posts != null && posts.size() > 0)

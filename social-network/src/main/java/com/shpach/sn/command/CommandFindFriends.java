@@ -12,12 +12,12 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import com.shpach.sn.manager.Config;
+import com.shpach.sn.pagination.IPaginationService;
+import com.shpach.sn.pagination.Pagination;
+import com.shpach.sn.pagination.PaginationServiceImpl;
 import com.shpach.sn.persistence.entities.User;
 import com.shpach.sn.service.SessionServise;
 import com.shpach.sn.service.UserService;
-import com.shpak.sn.pagination.IPaginationService;
-import com.shpak.sn.pagination.Pagination;
-import com.shpak.sn.pagination.PaginationServiceImpl;
 
 /**
  * Command for Find User page

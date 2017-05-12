@@ -162,10 +162,10 @@ public class PostService {
 		return res;
 	}
 
-	public List<Post> getFriendsPostsWhithZeroCommunityByUser(User user) {
+	public List<Post> getFriendsPostsWhithZeroCommunityByUser(User user, int startFrom, int itemsOnPage) {
 		List<User> friends=getUsersCollectionFromFriendsByUser(user);
 		List<Integer> friendsId=getUsersId(friends);
-		List<Post> posts=getPostDao().findPostByUserId(friendsId);
+		List<Post> posts=getPostDao().findPostByUserId(friendsId,startFrom, itemsOnPage);
 		getCommentService().injectCommentsToPost(posts);
 		return posts;
 	}
@@ -178,7 +178,7 @@ public class PostService {
 		return friendsId;
 	}
 
-	private List<User> getUsersCollectionFromFriendsByUser(User user) {
+	public List<User> getUsersCollectionFromFriendsByUser(User user) {
 		List<User> friends=new ArrayList<>();
 		for (Friend friend : user.getFriends()) {
 			if (friend.getHostUserId()==user.getUserId()){

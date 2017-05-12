@@ -1,4 +1,4 @@
-package com.shpak.sn.pagination;
+package com.shpach.sn.pagination;
 
 public interface IPaginationService {
 	

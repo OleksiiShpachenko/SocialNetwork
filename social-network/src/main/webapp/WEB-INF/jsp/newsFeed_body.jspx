@@ -54,58 +54,111 @@
 					<strong>${addFriendSuccess} </strong>
 				</div>
 			</c:if>
+			<div class="row">
+				<div class="col-md-offset-2 col-md-8">
+					<h3>${newsFeedText}</h3>
+				</div>
+				<c:forEach var="elem" items="${newsFeed}" varStatus="status">
+					<div>
+						<div class="panel panel-default col-md-offset-2 col-md-8">
+							<div class="panel-body ">
 
-			<div class="col-md-offset-2 col-md-8">
-				<h3>${newsFeedText}</h3>
-			</div>
-			<c:forEach var="elem" items="${newsFeed}" varStatus="status">
-				<div>
-					<div class="panel panel-default col-md-offset-2 col-md-8">
-						<div class="panel-body ">
 
-
-							<div class="col-md-12">
-								<p class="postText">
-									<b>${fn:escapeXml(elem.user.userName)}</b><br />
-								<p style="color: gray;">
-									<fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${elem.postCreateDatetime}" />
-								</p>
-								${fn:escapeXml(elem.postText)}
-								</p>
-
-								<c:forEach var="elemComment" items="${elem.comments}" varStatus="status">
-									<span class="anchor" id="comment_${elemComment.commentId}"><jsp:text /></span>
+								<div class="col-md-12">
 									<p class="postText">
-										<b>${fn:escapeXml(elemComment.user.userName)}</b>&#160;<span style="color: gray;"><fmt:formatDate pattern="yyyy-MM-dd HH:mm"
-												value="${elemComment.commentCreateDatetime}" /></span>&#160;${fn:escapeXml(elemComment.commentText)}
+										<b>${fn:escapeXml(elem.user.userName)}</b><br />
+									<p style="color: gray;">
+										<fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${elem.postCreateDatetime}" />
 									</p>
-								</c:forEach>
-								<form class="form-horizontal noMarginTop " role="form" action="pages" method="post">
-									<input type="hidden" name="command" value="addComment" /> <input type="hidden" name="postId" value="${elem.postId}" />
-									<div class="form-horizontal">
-										<div class="form-group">
-											<div class="">
-												<textarea class="form-control" name="commentText" rows="1" placeholder="${placeHolderComment}" required="required"><jsp:text /></textarea>
-											</div>
-										</div>
-										<div class="form-group">
-											<!-- Button -->
-											<fmt:message key="login.enter" bundle="${rb}" var="enterText" />
-											<div class="">
-												<button id="btn-signup" type="submit" class="btn btn-info">
-													<i class="icon-hand-right"></i> &#160;${publish}
-												</button>
+									${fn:escapeXml(elem.postText)}
+									</p>
 
+									<c:forEach var="elemComment" items="${elem.comments}" varStatus="status">
+										<span class="anchor" id="comment_${elemComment.commentId}"><jsp:text /></span>
+										<p class="postText">
+											<b>${fn:escapeXml(elemComment.user.userName)}</b>&#160;<span style="color: gray;"><fmt:formatDate pattern="yyyy-MM-dd HH:mm"
+													value="${elemComment.commentCreateDatetime}" /></span>&#160;${fn:escapeXml(elemComment.commentText)}
+										</p>
+									</c:forEach>
+									<form class="form-horizontal noMarginTop " role="form" action="pages" method="post">
+										<input type="hidden" name="command" value="addComment" /> <input type="hidden" name="postId" value="${elem.postId}" />
+										<div class="form-horizontal">
+											<div class="form-group">
+												<div class="">
+													<textarea class="form-control" name="commentText" rows="1" placeholder="${placeHolderComment}" required="required"><jsp:text /></textarea>
+												</div>
+											</div>
+											<div class="form-group">
+												<!-- Button -->
+												<fmt:message key="login.enter" bundle="${rb}" var="enterText" />
+												<div class="">
+													<button id="btn-signup" type="submit" class="btn btn-info">
+														<i class="icon-hand-right"></i> &#160;${publish}
+													</button>
+
+												</div>
 											</div>
 										</div>
-									</div>
-								</form>
+									</form>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			</c:forEach>
+				</c:forEach>
+			</div>
+			<div class="row col-md-offset-2 col-md-8">
+				<ul class="pagination">
+					<c:choose>
+						<c:when test="${startPage>paginationCount}">
+							<li><form action="pages" method="post">
+									<input type="hidden" name="command" value="pagination" /> <input type="hidden" name="pageNo" value="${startPage-paginationCount}" /> <input
+										type="submit" class="btn btn-default " value="&#xab;"></input>
+								</form></li>
 
+						</c:when>
+
+						<c:otherwise>
+							<!--<li class="disabled"><a href="#">&#xab;</a></li>-->
+						</c:otherwise>
+					</c:choose>
+
+					<c:forEach begin="${startPage}" end="${stopPage}" varStatus="loop">
+						<c:choose>
+							<c:when test="${loop.index==currentPage}">
+								<li class="active"><form action="pages" method="post">
+										<input type="hidden" name="command" value="pagination" /> <input type="hidden" name="pageNo" value="${loop.index}" /> <input type="submit"
+											class="btn btn-default activePagination" value="${loop.index}"></input>
+									</form></li>
+								<!--<li class="active"><a href="#">${loop.index} <span class="sr-only">(current)</span></a></li>-->
+							</c:when>
+
+							<c:otherwise>
+								<li><form action="pages" method="post">
+										<input type="hidden" name="command" value="pagination" /> <input type="hidden" name="pageNo" value="${loop.index}" /> <input type="submit"
+											class="btn btn-default " value="${loop.index}"></input>
+									</form></li>
+								<!-- <li><a href="#">${loop.index} <span class="sr-only">(current)</span></a></li>-->
+							</c:otherwise>
+						</c:choose>
+
+					</c:forEach>
+
+					<c:choose>
+						<c:when test="${maxPage>stopPage}">
+							<li><form action="pages" method="post">
+									<input type="hidden" name="command" value="pagination" /> <input type="hidden" name="pageNo" value="${stopPage+1}" /> <input type="submit"
+										class="btn btn-default " value="&#xbb;"></input>
+								</form></li>
+
+						</c:when>
+
+						<c:otherwise>
+							<!-- <li class="disabled"><a href="#">&#xbb;</a></li>-->
+						</c:otherwise>
+					</c:choose>
+
+				</ul>
+			</div>
 
 
 		</div>

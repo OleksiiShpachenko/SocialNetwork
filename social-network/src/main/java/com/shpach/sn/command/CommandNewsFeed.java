@@ -18,6 +18,9 @@ import javax.servlet.http.Part;
 import org.apache.log4j.Logger;
 
 import com.shpach.sn.manager.Config;
+import com.shpach.sn.pagination.IPaginationService;
+import com.shpach.sn.pagination.Pagination;
+import com.shpach.sn.pagination.PaginationServiceImpl;
 import com.shpach.sn.persistence.entities.Post;
 import com.shpach.sn.persistence.entities.User;
 import com.shpach.sn.service.FriendService;
@@ -33,7 +36,7 @@ import com.shpach.sn.service.UserService;
  */
 public class CommandNewsFeed implements ICommand {
 	private static final Logger logger = Logger.getLogger(CommandNewsFeed.class);
-	private static final int NO_LIMIT = 0;
+	private static final int ITEMS_ON_PAGE = 3;
 
 	public String execute(HttpServletRequest request, HttpServletResponse responce)
 			throws ServletException, IOException {
@@ -57,9 +60,18 @@ public class CommandNewsFeed implements ICommand {
 
 		request.getSession().setAttribute("userEntity", user);
 		
+		
+		int currentPage = 1;
+		if (request.getAttribute("currentPage") == null) {
+			request.setAttribute("currentPage", currentPage);
+		} else {
+			currentPage = (int) request.getAttribute("currentPage");
+		}
+		int startFrom = (currentPage - 1) * ITEMS_ON_PAGE;
+		
 		UserService.getInstance().injectFriendToUser(user);
 		UserService.getInstance().injectSecondUserToFriend(user);
-		List<Post> newsFeed=PostService.getInstance().getFriendsPostsWhithZeroCommunityByUser(user);
+		List<Post> newsFeed=PostService.getInstance().getFriendsPostsWhithZeroCommunityByUser(user,startFrom, ITEMS_ON_PAGE);
 		UserService.getInstance().injectUserToPost(newsFeed);
 		
 		
@@ -81,8 +93,24 @@ public class CommandNewsFeed implements ICommand {
 		lastRequest.putAll(request.getParameterMap());
 		request.getSession().setAttribute("lastRequest", lastRequest);
 		
+		List<User> friends=PostService.getInstance().getUsersCollectionFromFriendsByUser(user);
+		int postsCount = PostService.getInstance().countUserPosts(friends);
 		
-		List<Post> timeLinePosts;
+		Pagination pagination = new Pagination(currentPage, postsCount, ITEMS_ON_PAGE);
+		IPaginationService paginationService = new PaginationServiceImpl(pagination);
+
+		int startpage, maxPage, stopPage;
+		if (paginationService.validatePaginationData()) {
+			startpage = paginationService.calcStartPage();
+			maxPage = paginationService.calcMaxPage();
+			stopPage = paginationService.calcStopPage();
+		} else {
+			startpage = 1;
+			maxPage = 1;
+			stopPage = 1;
+		}
+		
+		//List<Post> timeLinePosts;
 		
 		
 		//List<User> userFriends = UserService.getInstance().getUserFriendsCollection(userInfo);
@@ -102,6 +130,11 @@ public class CommandNewsFeed implements ICommand {
 //		}
 //		request.setAttribute("userInfo", userInfo);
 		request.setAttribute("newsFeed", newsFeed);
+		
+		request.setAttribute("startPage", startpage);
+		request.setAttribute("stopPage", stopPage);
+		request.setAttribute("paginationCount", pagination.getPaginationCount());
+		request.setAttribute("maxPage", maxPage);
 		//request.setAttribute("userFriends", userFriends);
 		//request.setAttribute("userNeedToApprove", userNeedToApprove);
 		//request.setAttribute("userWaitForAccept", userWaitForAccept);

@@ -16,8 +16,6 @@ public interface IPostDao {
 	public Post findPostById(int id);
 
 	public List<Post> findPostByUserId(int userId, int startFrom, int itemsOnPage);
-
-	public List<Post> findPostByUserId(int userId);
 	
 	public List<Post> findPostByCommunityId(int communityId);
 
@@ -25,7 +23,7 @@ public interface IPostDao {
 
 	boolean deletePostById(int id, Connection con);
 
-	public List<Post> findPostByUserId(List<Integer> usersId);
+	public List<Post> findPostByUserId(List<Integer> usersId, int startFrom, int itemsOnPage);
 
 	public int countUsersPostsById(Object[] array);
 }
