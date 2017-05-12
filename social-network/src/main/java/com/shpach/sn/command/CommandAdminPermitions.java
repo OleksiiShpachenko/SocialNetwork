@@ -89,7 +89,7 @@ public class CommandAdminPermitions implements ICommand {
 		request.setAttribute("paginationCount", pagination.getPaginationCount());
 		request.setAttribute("maxPage", maxPage);
 
-		page = Config.getInstance().getProperty(Config.FIND_FRIENDS);
+		page = Config.getInstance().getProperty(Config.ADMIN_PERMITIONS);
 		return page;
 	}
 

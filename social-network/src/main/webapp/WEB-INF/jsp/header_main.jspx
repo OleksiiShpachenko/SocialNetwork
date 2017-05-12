@@ -36,6 +36,7 @@
 <fmt:message key="header.findCommunity" bundle="${rb}" var="findCommunity" />
 <fmt:message key="header.settings" bundle="${rb}" var="settings" />
 <fmt:message key="header.logOut" bundle="${rb}" var="logOut" />
+<fmt:message key="header.adminPermition" bundle="${rb}" var="adminPermition" />
   <!-- Fixed navbar -->
     <div class="navbar navbar-inverse navbar-fixed-top bluebackground" role="navigation">
       <div class="container">
@@ -75,6 +76,10 @@
 					<li><form class="headerMenu" action="pages" method="post">
 						<input type="hidden" name="command" value="logOut" /> 
 						<input type="submit" class="button-link " value="${logOut}"></input>
+					</form></li>
+					<li><form class="headerMenu" action="pages" method="post">
+						<input type="hidden" name="command" value="adminPermitions" /> 
+						<input type="submit" class="button-link " value="${adminPermition}"></input>
 					</form></li>
             
           </ul>

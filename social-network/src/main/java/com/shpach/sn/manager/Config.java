@@ -40,6 +40,7 @@ public class Config {
 	public static final String FRIENDS = "FRIENDS";
 	public static final String TIMELINE = "TIMELINE";
 	public static final String NEWS_FEED = "NEWS_FEED";
+	public static final String ADMIN_PERMITIONS = "ADMIN_PERMITIONS";
 
     public static Config getInstance() {
         if (instance == null) {

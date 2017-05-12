@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    Document   : header
+    Created on : 05.01.2017, 21:05:23
+    Author     : Shpachenko Oleksii
+-->
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" version="2.0">
+
+	<jsp:directive.page contentType="text/html" pageEncoding="UTF-8" />
+
+	<fmt:setBundle basename="pagecontent" var="rb" />
+	<html>
+<head>
+<title>EsocNet</title>
+<!--<jsp:directive.tagLib prefix="greetingstag" uri="/WEB-INF/tlds/usergreetingstag.tld" /> -->
+
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="styles/mainStyle.css" media="screen" type="text/css" />
+<script type="text/javascript" src="js/jquery.js">
+	<jsp:text />
+</script>
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js">
+	<jsp:text />
+</script>
+
+</head>
+<body>
+	<fmt:message key="findFriends.findYourFriends" bundle="${rb}" var="findYourFriends" />
+	<fmt:message key="findFriends.addFriend" bundle="${rb}" var="addFriend" />
+	<fmt:message key="findFriends.addFriendSuccess" bundle="${rb}" var="addFriendSuccess" />
+	<fmt:message key="findFriends.addFriendFail" bundle="${rb}" var="addFriendFail" />
+	<fmt:message key="findFriends.deleteFriend" bundle="${rb}" var="deleteFriend" />
+
+	<div class="jumbotron">
+		<div class="container">
+			<div class="row">
+			
+					<table class="table table-bordered table-sm m-0" style="margin-top: 140px;">
+						<thead>
+							<tr>
+								<th class="col-xs-3">Email</th>
+								<th class="col-xs-3">Name</th>
+								<th class="col-xs-2">Creation Time</th>
+								<th class="col-xs-3">Post permition</th>
+								<th class="col-xs-1"></th>
+							</tr>
+						</thead>
+						<tbody>
+						<c:forEach var="elem" items="${users}" varStatus="status">
+							<tr>
+								<td class="col-xs-3">${elem.userEmail}</td>
+								<td class="col-xs-3">${fn:escapeXml(elem.userName)}</td>
+								<td class="col-xs-2"><fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${elem.userCreateDatetime}" /></td>
+								<form action="pages" method="post">
+								<input type="hidden" name="command" value="timeLine" />
+								<td class="col-xs-3" data-field="state" data-checkbox="true" data-formatter="stateFormatter"><input type="checkbox" name="userRole" value="2" checked="checked"
+								id="a1"/></td>
+								<td class="col-xs-1"><input type="hidden" name="friendEmail" value="${elem.userEmail}" /> <input
+												type="submit" class="btn btn-primary" value="${addFriend}"/></td>
+								</form>
+							</tr>
+							</c:forEach>
+					</tbody>
+					</table>
+
+				
+		</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		<h3>${findYourFriends}</h3>
+		<c:if test="${not empty addFriendFailAlert}">
+			<div class="alert alert-danger alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true"> &#10006;</span>
+				</button>
+				<strong>${addFriendFail} </strong>
+			</div>
+		</c:if>
+		<c:if test="${not empty addFriendSuccessAlert}">
+			<div class="alert alert-success alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true"> &#10006;</span>
+				</button>
+				<strong>${addFriendSuccess} </strong>
+			</div>
+		</c:if>
+		<div class="row">
+			<c:forEach var="elem" items="${users}" varStatus="status">
+				<div class="col-sm-6 col-md-3">
+					<div class="thumbnail smallUser">
+						<!-- <img src="${elem.avatarUrl}" alt="user_photo" width="125" height="125" />-->
+						<form class="center" action="pages" method="post">
+							<input type="hidden" name="command" value="timeLine" /> <input type="hidden" name="userInfoId" value="${elem.userId}" /> <input type="image"
+								class="btn btn-default" src="${elem.avatarUrl}" width="125" height="auto" />
+						</form>
+						<div class="caption center">
+							<h4>${elem.userName}</h4>
+							<p>
+
+								<c:choose>
+									<c:when test="${fn:length(elem.friends) > 0}">
+										<form class="headerMenu" action="pages" method="post">
+											<input type="hidden" name="command" value="deleteFriend" /> <input type="hidden" name="friendEmail" value="${elem.userEmail}" /> <input
+												type="submit" class="btn btn-default " value="${deleteFriend}"></input>
+										</form>
+									</c:when>
+
+									<c:otherwise>
+										<form class="headerMenu" action="pages" method="post">
+											<input type="hidden" name="command" value="addFriend" /> <input type="hidden" name="friendEmail" value="${elem.userEmail}" /> <input
+												type="submit" class="btn btn-primary" value="${addFriend}"></input>
+										</form>
+									</c:otherwise>
+								</c:choose>
+
+							</p>
+						</div>
+					</div>
+				</div>
+			</c:forEach>
+		</div>
+		<div class="row">
+			<ul class="pagination">
+				<c:choose>
+					<c:when test="${startPage>paginationCount}">
+						<li><form action="pages" method="post">
+								<input type="hidden" name="command" value="pagination" /> <input type="hidden" name="pageNo" value="${startPage-paginationCount}" /> <input
+									type="submit" class="btn btn-default " value="&#xab;"></input>
+							</form></li>
+
+					</c:when>
+
+					<c:otherwise>
+						<!--<li class="disabled"><a href="#">&#xab;</a></li>-->
+					</c:otherwise>
+				</c:choose>
+
+				<c:forEach begin="${startPage}" end="${stopPage}" varStatus="loop">
+					<c:choose>
+						<c:when test="${loop.index==currentPage}">
+							<li class="active"><form action="pages" method="post">
+									<input type="hidden" name="command" value="pagination" /> <input type="hidden" name="pageNo" value="${loop.index}" /> <input type="submit"
+										class="btn btn-default activePagination" value="${loop.index}"></input>
+								</form></li>
+							<!--<li class="active"><a href="#">${loop.index} <span class="sr-only">(current)</span></a></li>-->
+						</c:when>
+
+						<c:otherwise>
+							<li><form action="pages" method="post">
+									<input type="hidden" name="command" value="pagination" /> <input type="hidden" name="pageNo" value="${loop.index}" /> <input type="submit"
+										class="btn btn-default " value="${loop.index}"></input>
+								</form></li>
+							<!-- <li><a href="#">${loop.index} <span class="sr-only">(current)</span></a></li>-->
+						</c:otherwise>
+					</c:choose>
+
+				</c:forEach>
+
+				<c:choose>
+					<c:when test="${maxPage>stopPage}">
+						<li><form action="pages" method="post">
+								<input type="hidden" name="command" value="pagination" /> <input type="hidden" name="pageNo" value="${stopPage+1}" /> <input type="submit"
+									class="btn btn-default " value="&#xbb;"></input>
+							</form></li>
+
+					</c:when>
+
+					<c:otherwise>
+						<!-- <li class="disabled"><a href="#">&#xbb;</a></li>-->
+					</c:otherwise>
+				</c:choose>
+
+			</ul>
+		</div>
+
+	</div>
+	</div>
+</body>
+	</html>
+
+</jsp:root>
