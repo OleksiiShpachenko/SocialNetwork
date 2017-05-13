@@ -1,2 +1,2 @@
 # SocialNetwork
-Web project for Epam Java Web developer training course
+Web project for Java Web developer training course
