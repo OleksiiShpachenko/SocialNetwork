@@ -26,6 +26,7 @@ import com.shpach.sn.persistence.entities.User;
 import com.shpach.sn.service.FriendService;
 import com.shpach.sn.service.PostService;
 import com.shpach.sn.service.SessionServise;
+import com.shpach.sn.service.UserRoleService;
 import com.shpach.sn.service.UserService;
 
 /**
@@ -57,7 +58,11 @@ public class CommandNewsFeed implements ICommand {
 			return page = Config.getInstance().getProperty(Config.LOGIN);
 		}
 		User user = UserService.getInstance().getUserByLogin((String) session.getAttribute("user"));
-
+		
+		if (UserRoleService.getInstance().isUserAdmin(user)){
+			request.setAttribute("userAdmin", true);
+		}
+		
 		request.getSession().setAttribute("userEntity", user);
 		
 		

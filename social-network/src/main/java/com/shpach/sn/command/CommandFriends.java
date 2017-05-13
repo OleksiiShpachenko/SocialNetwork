@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import com.shpach.sn.manager.Config;
 import com.shpach.sn.persistence.entities.User;
 import com.shpach.sn.service.SessionServise;
+import com.shpach.sn.service.UserRoleService;
 import com.shpach.sn.service.UserService;
 
 /**
@@ -45,6 +46,10 @@ public class CommandFriends implements ICommand {
 		}
 		User user = UserService.getInstance().getUserByLogin((String) session.getAttribute("user"));
 
+		if (UserRoleService.getInstance().isUserAdmin(user)){
+			request.setAttribute("userAdmin", true);
+		}
+		
 		request.getSession().setAttribute("userEntity", user);
 		User userInfo;
 		try {

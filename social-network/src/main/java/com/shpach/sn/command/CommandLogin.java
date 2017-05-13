@@ -16,6 +16,7 @@ import com.shpach.sn.manager.Message;
 import com.shpach.sn.persistence.entities.User;
 import com.shpach.sn.service.LoginService;
 import com.shpach.sn.service.SessionServise;
+import com.shpach.sn.service.UserRoleService;
 import com.shpach.sn.service.UserService;
 
 
@@ -63,6 +64,9 @@ public class CommandLogin implements ICommand {
 
 		}
 		User user = UserService.getInstance().getUserByLogin((String) session.getAttribute("user"));
+		if (UserRoleService.getInstance().isUserAdmin(user)){
+			request.setAttribute("userAdmin", true);
+		}
 		request.getSession().setAttribute("userEntity", user);
 		request.getSession().setAttribute("userName", user.getUserName());
 		//UsersRole usersRole = UserRoleService.getInstance().getUserRoleById(user.getRoleId());

@@ -17,6 +17,7 @@ import com.shpach.sn.pagination.Pagination;
 import com.shpach.sn.pagination.PaginationServiceImpl;
 import com.shpach.sn.persistence.entities.User;
 import com.shpach.sn.service.SessionServise;
+import com.shpach.sn.service.UserRoleService;
 import com.shpach.sn.service.UserService;
 
 /**
@@ -49,6 +50,10 @@ public class CommandFindFriends implements ICommand {
 		}
 		User user = UserService.getInstance().getUserByLogin((String) session.getAttribute("user"));
 
+		if (UserRoleService.getInstance().isUserAdmin(user)){
+			request.setAttribute("userAdmin", true);
+		}
+		
 		request.getSession().setAttribute("userEntity", user);
 		UserService.getInstance().injectFriendToUser(user);
 		request.getSession().setAttribute("user", user.getUserEmail());

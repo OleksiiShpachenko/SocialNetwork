@@ -24,10 +24,10 @@ import com.shpach.sn.command.CommandNewsFeed;
 import com.shpach.sn.command.CommandPagination;
 import com.shpach.sn.command.CommandRegistration;
 import com.shpach.sn.command.CommandTimeLine;
+import com.shpach.sn.command.CommandUpdateUser;
 import com.shpach.sn.command.CommandUserSettings;
 import com.shpach.sn.command.ICommand;
 import com.shpach.sn.persistence.entities.User;
-
 
 /**
  * @author Shpachenko_A_K
@@ -39,6 +39,7 @@ public class ControllerHelper {
 	HashMap<String, ICommand> commands = new HashMap<String, ICommand>();
 
 	private ControllerHelper() {
+		commands.put("updateUser", new CommandUpdateUser());
 		commands.put("adminPermitions", new CommandAdminPermitions());
 		commands.put("pagination", new CommandPagination());
 		commands.put("newsFeed", new CommandNewsFeed());
@@ -98,7 +99,8 @@ public class ControllerHelper {
 		boolean setLastRequest = commandText.equals("locale") || commandText.equals("avatarUpload")
 				|| commandText.equals("addFriend") || commandText.equals("deleteFriend")
 				|| commandText.equals("approveFriend") || commandText.equals("deletePost")
-				|| commandText.equals("addPost") || commandText.equals("addComment")|| commandText.equals("pagination");
+				|| commandText.equals("addPost") || commandText.equals("addComment") || commandText.equals("pagination")
+				|| commandText.equals("updateUser");
 
 		if (setLastRequest) {
 			Map<String, String[]> lastRequest = (HashMap<String, String[]>) request.getSession()

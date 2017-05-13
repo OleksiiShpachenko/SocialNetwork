@@ -33,6 +33,8 @@
 	<fmt:message key="friends.approveFriend" bundle="${rb}" var="approveFriend" />
 	<fmt:message key="findFriends.deleteFriend" bundle="${rb}" var="deleteFriend" />
 	<fmt:message key="header.newsFeed" bundle="${rb}" var="newsFeedText" />
+	<fmt:message key="post.placeHolderPostDisabled" bundle="${rb}" var="placeHolderPostDisabled" />
+	<fmt:message key="post.placeHolderCommentDisabled" bundle="${rb}" var="placeHolderCommentDisabled" />
 
 
 	<div class="jumbotron ">
@@ -85,16 +87,34 @@
 										<div class="form-horizontal">
 											<div class="form-group">
 												<div class="">
-													<textarea class="form-control" name="commentText" rows="1" placeholder="${placeHolderComment}" required="required"><jsp:text /></textarea>
+													<c:choose>
+														<c:when test="${userEntity.userCommentPermition == 1}">
+															<textarea class="form-control" name="commentText" rows="1" placeholder="${placeHolderComment}" required="required"><jsp:text /></textarea>
+														</c:when>
+
+														<c:otherwise>
+															<textarea disabled="disabled" class="form-control" name="commentText" rows="1" placeholder="${placeHolderCommentDisabled}" required="required"><jsp:text /></textarea>
+														</c:otherwise>
+													</c:choose>
 												</div>
 											</div>
 											<div class="form-group">
 												<!-- Button -->
 												<fmt:message key="login.enter" bundle="${rb}" var="enterText" />
 												<div class="">
-													<button id="btn-signup" type="submit" class="btn btn-info">
-														<i class="icon-hand-right"></i> &#160;${publish}
-													</button>
+													<c:choose>
+														<c:when test="${userEntity.userCommentPermition == 1}">
+															<button id="btn-signup" type="submit" class="btn btn-info">
+																<i class="icon-hand-right"></i> &#160;${publish}
+															</button>
+														</c:when>
+
+														<c:otherwise>
+															<button disabled="disabled" id="btn-signup" type="submit" class="btn btn-info">
+																<i class="icon-hand-right"></i> &#160;${publish}
+															</button>
+														</c:otherwise>
+													</c:choose>
 
 												</div>
 											</div>

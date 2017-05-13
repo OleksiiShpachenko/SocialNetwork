@@ -81,6 +81,8 @@ public class User implements Serializable {
 	@OneToMany(mappedBy="user")
 	private List<Post> posts;
 
+	private List<UserRole> userRoles;
+	
 	public User() {
 		userCreateDatetime= new Date();
 		userPostPermition=1;
@@ -296,6 +298,14 @@ public class User implements Serializable {
 
 	public void setUserCreateDatetime(Date userCreateDatetime) {
 		this.userCreateDatetime = userCreateDatetime;
+	}
+
+	public List<UserRole> getUserRoles() {
+		return userRoles;
+	}
+
+	public void setUserRoles(List<UserRole> userRoles) {
+		this.userRoles = userRoles;
 	}
 
 	@Override

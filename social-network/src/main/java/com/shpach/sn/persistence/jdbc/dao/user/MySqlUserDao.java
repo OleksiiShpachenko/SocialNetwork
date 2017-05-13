@@ -10,8 +10,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.shpach.sn.persistence.entities.User;
-import com.shpach.sn.persistence.jdbc.connection.ConnectionPoolTomCatFactory;
-import com.shpach.sn.persistence.jdbc.connection.IConnectionPoolFactory;
+import com.shpach.sn.persistence.entities.UserRole;
 import com.shpach.sn.persistence.jdbc.dao.abstractdao.AbstractDao;
 
 public class MySqlUserDao extends AbstractDao<User> implements IUserDao {
@@ -42,7 +41,7 @@ public class MySqlUserDao extends AbstractDao<User> implements IUserDao {
 	protected static final String TABLE_RELATIONSHIP_LIKES = "relationship_likes";
 	protected static final String TABLE_USER_TO_USER_ROLE = "relationship_user_to_user_role";
 	private static final int USER_ROLE_USER = 2;
-	
+
 	protected final String SQL_SELECT = "SELECT " + Columns.user_id.name() + ", " + Columns.user_login.name() + ", "
 			+ Columns.user_password.name() + ", " + Columns.user_name.name() + ", " + Columns.user_email.name() + ", "
 			+ Columns.avatar_url.name() + ", " + Columns.user_active.name() + ", " + Columns.user_post_permition.name()
@@ -50,8 +49,9 @@ public class MySqlUserDao extends AbstractDao<User> implements IUserDao {
 			+ Columns.user_create_community_permition.name() + ", " + Columns.user_create_datetime.name() + " FROM "
 			+ TABLE_NAME + "";
 
-	private  final String SQL_SELECT_ALL_EXCLUDE_ME_LIMIT =SQL_SELECT+ " WHERE " + Columns.user_id.name() + "!=? LIMIT ?, ?";
-	
+	private final String SQL_SELECT_ALL_EXCLUDE_ME_LIMIT = SQL_SELECT + " WHERE " + Columns.user_id.name()
+			+ "!=? LIMIT ?, ?";
+
 	protected final String SQL_INSERT = "INSERT INTO " + TABLE_NAME + " (" + Columns.user_login.name() + ", "
 			+ Columns.user_password.name() + ", " + Columns.user_name.name() + ", " + Columns.user_email.name() + ", "
 			+ Columns.avatar_url.name() + ", " + Columns.user_active.name() + ", " + Columns.user_post_permition.name()
@@ -71,6 +71,9 @@ public class MySqlUserDao extends AbstractDao<User> implements IUserDao {
 
 	protected final String SQL_SELECT_LIKES_BY_POST_ID = SQL_SELECT + " t RIGHT JOIN " + TABLE_RELATIONSHIP_LIKES
 			+ " j ON t." + Columns.user_id.name() + "=j." + Columns.user_id.name() + " WHERE j.post_id=?";
+
+	protected final String SQL_DELETE_USER_ROLE_RELATOINSHIP = "DELETE FROM " + TABLE_USER_TO_USER_ROLE + " WHERE "
+			+ Columns.user_id.name() + "=?";
 	// protected final String SQL_SELECT_BY_COMMUNITY_ID = "SELECT " +
 	// TABLE_NAME + "." + Columns.user_id.name() + ", "
 	// + TABLE_NAME + "." + Columns.role_id.name() + ", " + TABLE_NAME + "." +
@@ -101,16 +104,16 @@ public class MySqlUserDao extends AbstractDao<User> implements IUserDao {
 	public List<User> findAll() {
 		return findByDynamicSelect(SQL_SELECT, null, null);
 	}
-	
-	
-	public List<User> findAllExcludMe(int userId,int startFrom, int limit) {
+
+	public List<User> findAllExcludMe(int userId, int startFrom, int limit) {
 		List<User> res = null;
-		res = findByDynamicSelect(SQL_SELECT_ALL_EXCLUDE_ME_LIMIT, new Integer[] {userId, startFrom, limit }); //startFrom+limit });
+		res = findByDynamicSelect(SQL_SELECT_ALL_EXCLUDE_ME_LIMIT, new Integer[] { userId, startFrom, limit }); // startFrom+limit
+																												// });
 		if (res != null && res.size() > 0)
 			return res;
 		return new ArrayList<User>();
 	}
-	
+
 	public User addOrUpdate(User user) {
 		boolean res = false;
 		if (user.getUserId() == 0) {
@@ -129,7 +132,46 @@ public class MySqlUserDao extends AbstractDao<User> implements IUserDao {
 				user.getUserEmail(), user.getAvatarUrl(), user.getUserActive(), user.getUserPostPermition(),
 				user.getUserInvitePermition(), user.getUserCommentPermition(), user.getUserCreateCommunityPermition(),
 				user.getUserCreateDatetime(), user.getUserId() };
-		return dynamicUpdate(SQL_UPDATE, sqlParams);
+		if (user.getUserRoles() == null || user.getUserRoles().size() == 0)
+			return dynamicUpdate(SQL_UPDATE, sqlParams);
+
+		Connection cn = null;
+		try {
+			cn = getConnection();
+			cn.setAutoCommit(false);
+			boolean userUpdated = dynamicUpdate(SQL_UPDATE, cn, sqlParams);
+			if (!userUpdated) {
+				cn.rollback();
+				return false;
+			}
+			boolean deleteRolesRelations = dynamicUpdate(SQL_DELETE_USER_ROLE_RELATOINSHIP, cn,
+					new Object[] { user.getUserId() });
+			if (!deleteRolesRelations) {
+				cn.rollback();
+				return false;
+			}
+			for(UserRole userRole:user.getUserRoles()){
+				int id=dynamicAdd(SQL_INSERT_USER_ROLE_RELATOINSHIP, cn, new Object[] { user.getUserId(), userRole.getUserRoleId() });
+				if (id < 0) {
+					cn.rollback();
+					return false;
+				}
+			}
+			return true;
+		} catch (SQLException | NullPointerException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			try {
+				cn.setAutoCommit(true);
+				if (cn != null)
+					cn.close();
+			} catch (SQLException | NullPointerException e) {
+				e.printStackTrace();
+			}
+
+		}
+
 	}
 
 	private boolean add(User user) {
@@ -162,8 +204,8 @@ public class MySqlUserDao extends AbstractDao<User> implements IUserDao {
 		} finally {
 			try {
 				cn.setAutoCommit(true);
-				if (cn!=null)
-				cn.close();
+				if (cn != null)
+					cn.close();
 			} catch (SQLException | NullPointerException e) {
 				e.printStackTrace();
 			}
@@ -231,8 +273,6 @@ public class MySqlUserDao extends AbstractDao<User> implements IUserDao {
 	public int count() {
 		return count(TABLE_NAME);
 	}
-
-	
 
 	// @Override
 	// public List<User> findUsersByCommunityId(int id) {

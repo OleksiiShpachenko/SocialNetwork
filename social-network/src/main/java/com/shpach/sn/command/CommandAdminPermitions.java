@@ -17,6 +17,7 @@ import com.shpach.sn.pagination.Pagination;
 import com.shpach.sn.pagination.PaginationServiceImpl;
 import com.shpach.sn.persistence.entities.User;
 import com.shpach.sn.service.SessionServise;
+import com.shpach.sn.service.UserRoleService;
 import com.shpach.sn.service.UserService;
 
 /**
@@ -27,7 +28,7 @@ import com.shpach.sn.service.UserService;
  */
 public class CommandAdminPermitions implements ICommand {
 	private static final Logger logger = Logger.getLogger(CommandAdminPermitions.class);
-	private static final int ITEMS_ON_PAGE = 8;
+	private static final int ITEMS_ON_PAGE = 5;
 
 	public String execute(HttpServletRequest request, HttpServletResponse responce)
 			throws ServletException, IOException {
@@ -49,6 +50,10 @@ public class CommandAdminPermitions implements ICommand {
 		}
 		User user = UserService.getInstance().getUserByLogin((String) session.getAttribute("user"));
 
+		if (UserRoleService.getInstance().isUserAdmin(user)){
+			request.setAttribute("userAdmin", true);
+		}
+		
 		request.getSession().setAttribute("userEntity", user);
 		UserService.getInstance().injectFriendToUser(user);
 		request.getSession().setAttribute("user", user.getUserEmail());

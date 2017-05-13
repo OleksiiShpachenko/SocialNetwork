@@ -73,14 +73,17 @@
 						<input type="hidden" name="command" value="usersettings" /> 
 						<input type="submit" class="button-link " value="${settings}"></input>
 					</form></li>
-					<li><form class="headerMenu" action="pages" method="post">
-						<input type="hidden" name="command" value="logOut" /> 
-						<input type="submit" class="button-link " value="${logOut}"></input>
-					</form></li>
+					<c:if test="${not empty userAdmin}">
 					<li><form class="headerMenu" action="pages" method="post">
 						<input type="hidden" name="command" value="adminPermitions" /> 
 						<input type="submit" class="button-link " value="${adminPermition}"></input>
 					</form></li>
+					</c:if>
+				<li><form class="headerMenu" action="pages" method="post">
+						<input type="hidden" name="command" value="logOut" /> 
+						<input type="submit" class="button-link " value="${logOut}"></input>
+					</form></li>
+					
             
           </ul>
           </div>

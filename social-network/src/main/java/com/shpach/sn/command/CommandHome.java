@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import com.shpach.sn.manager.Config;
 import com.shpach.sn.persistence.entities.User;
 import com.shpach.sn.service.SessionServise;
+import com.shpach.sn.service.UserRoleService;
 import com.shpach.sn.service.UserService;
 
 
@@ -48,6 +49,10 @@ public class CommandHome implements ICommand {
 		}
 		User user = UserService.getInstance().getUserByLogin((String) session.getAttribute("user"));
 
+		if (UserRoleService.getInstance().isUserAdmin(user)){
+			request.setAttribute("userAdmin", true);
+		}
+		
 		Map<String, String[]> lastRequest = new HashMap<String, String[]>();
 		lastRequest.putAll(request.getParameterMap());
 		

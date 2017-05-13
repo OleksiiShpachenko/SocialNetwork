@@ -41,8 +41,9 @@ public class MySqlUserRoleDao extends AbstractDao<UserRole> implements IUserRole
 	protected final String SQL_UPDATE = "UPDATE " + TABLE_NAME + " SET " + Columns.user_role_name.name() + "=? WHERE "
 			+ Columns.user_role_id.name() + "=?";
 	protected final String SQL_SELECT_BY_USER_ID = "SELECT t." + Columns.user_role_id.name() + ", t."
-			+ Columns.user_role_name.name() + ", " + " FROM " + TABLE_NAME + " t RIGHT JOIN " + TABLE_USER_TO_USER_ROLE
+			+ Columns.user_role_name.name() +  " FROM " + TABLE_NAME + " t RIGHT JOIN " + TABLE_USER_TO_USER_ROLE
 			+ " j ON t." + Columns.user_role_id.name() + "=j." + Columns.user_role_id.name() + " WHERE j.user_id=?";
+
 	private static MySqlUserRoleDao instance = null;
 
 	private MySqlUserRoleDao() {

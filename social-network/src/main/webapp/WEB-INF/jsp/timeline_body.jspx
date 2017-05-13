@@ -32,6 +32,8 @@
 	<fmt:message key="post.placeHolderComment" bundle="${rb}" var="placeHolderComment" />
 	<fmt:message key="friends.approveFriend" bundle="${rb}" var="approveFriend" />
 	<fmt:message key="findFriends.deleteFriend" bundle="${rb}" var="deleteFriend" />
+	<fmt:message key="post.placeHolderPostDisabled" bundle="${rb}" var="placeHolderPostDisabled" />
+	<fmt:message key="post.placeHolderCommentDisabled" bundle="${rb}" var="placeHolderCommentDisabled" />
 
 
 	<div class="jumbotron noPaddingTop">
@@ -54,36 +56,55 @@
 				</div>
 			</c:if>
 			<div class="row">
-			<c:if test="${empty notMe}">
-				<div>
-					<div class="panel panel-default col-md-offset-2 col-md-8">
-						<div class="panel-body ">
-							<form class="form-horizontal noMarginTop " role="form" action="pages" method="post">
-								<input type="hidden" name="command" value="addPost" />
-								<div class="form-horizontal">
-									<div class="form-group">
-										<div class="">
-											<textarea class="form-control" name="postText" rows="3" placeholder="${placeHolderPost}" required="required"><jsp:text /></textarea>
-										</div>
-									</div>
-									<div class="form-group">
-										<!-- Button -->
-										<fmt:message key="login.enter" bundle="${rb}" var="enterText" />
-										<div class="">
-											<button id="btn-signup" type="submit" class="btn btn-info">
-												<i class="icon-hand-right"></i> &#160;${publish}
-											</button>
+				<c:if test="${empty notMe}">
+					<div>
+						<div class="panel panel-default col-md-offset-2 col-md-8">
+							<div class="panel-body ">
+								<form class="form-horizontal noMarginTop " role="form" action="pages" method="post">
+									<input type="hidden" name="command" value="addPost" />
+									<div class="form-horizontal">
+										<div class="form-group">
+											<div class="">
+												<c:choose>
+													<c:when test="${userEntity.userPostPermition == 1}">
+														<textarea class="form-control" name="postText" rows="3" placeholder="${placeHolderPost}" required="required"><jsp:text /></textarea>
+													</c:when>
 
+													<c:otherwise>
+														<textarea disabled="disabled" class="form-control" name="postText" rows="3" placeholder="${placeHolderPostDisabled}" required="required"><jsp:text /></textarea>
+													</c:otherwise>
+												</c:choose>
+
+											</div>
+										</div>
+										<div class="form-group">
+											<!-- Button -->
+											<fmt:message key="login.enter" bundle="${rb}" var="enterText" />
+											<div class="">
+												<c:choose>
+													<c:when test="${userEntity.userPostPermition == 1}">
+														<button id="btn-signup" type="submit" class="btn btn-info">
+															<i class="icon-hand-right"></i> &#160;${publish}
+														</button>
+													</c:when>
+
+													<c:otherwise>
+														<button disabled="" id="btn-signup" type="submit" class="btn btn-info">
+															<i class="icon-hand-right"></i> &#160;${publish}
+														</button>
+													</c:otherwise>
+												</c:choose>
+
+											</div>
 										</div>
 									</div>
-								</div>
-							</form>
+								</form>
+							</div>
 						</div>
 					</div>
-				</div>
-			</c:if>
+				</c:if>
 
-			
+
 				<c:forEach var="elem" items="${timeLinePosts}" varStatus="status">
 					<div>
 						<div class="panel panel-default col-md-offset-2 col-md-8">
@@ -119,17 +140,34 @@
 										<div class="form-horizontal">
 											<div class="form-group">
 												<div class="">
-													<textarea class="form-control" name="commentText" rows="1" placeholder="${placeHolderComment}" required="required"><jsp:text /></textarea>
+													<c:choose>
+														<c:when test="${userEntity.userCommentPermition == 1}">
+															<textarea class="form-control" name="commentText" rows="1" placeholder="${placeHolderComment}" required="required"><jsp:text /></textarea>
+														</c:when>
+
+														<c:otherwise>
+															<textarea disabled="disabled" class="form-control" name="commentText" rows="1" placeholder="${placeHolderCommentDisabled}" required="required"><jsp:text /></textarea>
+														</c:otherwise>
+													</c:choose>
 												</div>
 											</div>
 											<div class="form-group">
 												<!-- Button -->
 												<fmt:message key="login.enter" bundle="${rb}" var="enterText" />
 												<div class="">
-													<button id="btn-signup" type="submit" class="btn btn-info">
-														<i class="icon-hand-right"></i> &#160;${publish}
-													</button>
+													<c:choose>
+														<c:when test="${userEntity.userCommentPermition == 1}">
+															<button id="btn-signup" type="submit" class="btn btn-info">
+																<i class="icon-hand-right"></i> &#160;${publish}
+															</button>
+														</c:when>
 
+														<c:otherwise>
+															<button disabled="disabled" id="btn-signup" type="submit" class="btn btn-info">
+																<i class="icon-hand-right"></i> &#160;${publish}
+															</button>
+														</c:otherwise>
+													</c:choose>
 												</div>
 											</div>
 										</div>
